@@ -18,9 +18,9 @@ const lightColors = {
   disabledButtonBg: '#E8E8E899',
 
   // primary button
-  primaryButtonBg: '#56C3A9E6', // 90%
-  primaryButtonHover: '#56C3A9', // 100%
-  primaryButtonActive: '#52b9a1',
+  primaryButtonBg: '#3E2D00E6', // 90%
+  primaryButtonHover: '#3E2D00', // 100%
+  primaryButtonActive: '#FFCC00',
 
   // warning button
   warningButtonBg: '#F7931A',

@@ -56,7 +56,7 @@ export default function LayoutDesktopNav(): JSX.Element {
         <Flex width="100%" px={12} maxWidth={DESKTOP_LAYOUT_LARGE_WIDTH}>
           <Flex alignItems="center" width={SIDE_WIDTH}>
             <BaseLink display="flex" alignItems="center" href={getPagePath({ page: PageId.Portfolio })}>
-              <Image src={getAssetSrc('/images/logo.png')} height={24} width={24} />
+              <Image src={getAssetSrc('/images/logo.svg')} height={25} width={157} />
             </BaseLink>
           </Flex>
           <Flex flexGrow={1} alignItems={'center'} justifyContent={'center'}>

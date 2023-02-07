@@ -19,9 +19,9 @@ function PortfolioOnboardingCard() {
   return (
     <Card height={PORTFOLIO_CARD_HEIGHT}>
       <CardSection justifyContent="center" alignItems="center" height="100%" width="100%">
-        <Image src={getAssetSrc('/images/logo.png')} mb={4} size={42} />
+        <Image src={getAssetSrc('/images/logo.svg')} mb={4} height={25} width={157} />
         <Text variant="title" mb={4}>
-          Welcome to Lyra
+          Welcome to Kwenta
         </Text>
         <Text textAlign="center" variant="secondary" color="secondaryText" mb={6}>
           Trade, provide liquidity and earn rewards with the Lyra Protocol

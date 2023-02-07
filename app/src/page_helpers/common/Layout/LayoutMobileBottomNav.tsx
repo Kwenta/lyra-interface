@@ -84,7 +84,7 @@ export default function LayoutMobileBottomNav(): JSX.Element {
           <Flex sx={{ position: 'sticky', top: 0, left: 0, right: 0, bg: 'cardBackrgoundSolid' }} p={6}>
             <Image
               href={getPagePath({ page: PageId.Portfolio })}
-              src={getAssetSrc('/images/logo.png')}
+              src={getAssetSrc('/images/logo.svg')}
               height={24}
               width={24}
             />

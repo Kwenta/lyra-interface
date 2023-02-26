@@ -1,6 +1,7 @@
 import ButtonShimmer from '@lyra/ui/components/Shimmer/ButtonShimmer'
 import React from 'react'
 
+import { ZERO_BN } from '@/app/constants/bn'
 import { TransactionType } from '@/app/constants/screen'
 import useTransaction from '@/app/hooks/account/useTransaction'
 import useWalletAccount from '@/app/hooks/account/useWalletAccount'
@@ -14,16 +15,17 @@ type Props = {
   onClaim?: () => void
 }
 
-const ClaimButton = withSuspense(
+const ClaimWethLyraStakingRewardsButton = withSuspense(
   ({ onClaim }: Props) => {
     const owner = useWalletAccount()
     const account = lyraOptimism.account(owner ?? '')
     const execute = useTransaction('ethereum')
     const mutateClaimableBalance = useMutateClaimableBalancesL1()
     const claimableBalances = useClaimableBalancesL1()
+    const isSelectedBalanceZero = ZERO_BN.add(claimableBalances.lyra).isZero()
 
-    const handleStkLyraClaim = async () => {
-      const tx = await account.claimStakedLyraRewards()
+    const handleLyraClaim = async () => {
+      const tx = await account.claimWethLyraRewards()
       await execute(tx, {
         onComplete: () => {
           mutateClaimableBalance()
@@ -39,15 +41,15 @@ const ClaimButton = withSuspense(
 
     return (
       <TransactionButton
-        transactionType={TransactionType.ClaimStakedLyraRewards}
+        transactionType={TransactionType.ClaimWethLyraRewards}
         network="ethereum"
         label="Claim"
-        isDisabled={claimableBalances.newStkLyra.isZero()}
-        onClick={async () => await handleStkLyraClaim()}
+        isDisabled={isSelectedBalanceZero}
+        onClick={async () => await handleLyraClaim()}
       />
     )
   },
   () => <ButtonShimmer size="lg" />
 )
 
-export default ClaimButton
+export default ClaimWethLyraStakingRewardsButton

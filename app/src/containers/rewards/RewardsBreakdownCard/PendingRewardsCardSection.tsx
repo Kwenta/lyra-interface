@@ -36,15 +36,13 @@ const PendingRewardsCardGridItems = withSuspense(
     const opVaultRewards = findOpRewardEpochToken(account?.totalVaultRewards ?? [])
     const opTradingRewards = findOpRewardEpochToken(account?.tradingRewards ?? [])
     const opShortCollatRewards = findOpRewardEpochToken(account?.shortCollateralRewards ?? [])
-    const wethLyraStakingRewards = findOpRewardEpochToken(account?.wethLyraStaking.rewards ?? [])
+    const wethLyraStakingL2Rewards = findOpRewardEpochToken(account?.wethLyraStakingL2.rewards ?? [])
     const opRewards =
-      opStakingRewards + opVaultRewards + opTradingRewards + opShortCollatRewards + wethLyraStakingRewards
-    const stkLyraStakingRewards = findLyraRewardEpochToken(account?.stakingRewards ?? [])
+      opStakingRewards + opVaultRewards + opTradingRewards + opShortCollatRewards + wethLyraStakingL2Rewards
     const stkLyraVaultRewards = findLyraRewardEpochToken(account?.totalVaultRewards ?? [])
     const stkLyraTradingRewards = findLyraRewardEpochToken(account?.tradingRewards ?? [])
     const stkLyraShortCollatRewards = findLyraRewardEpochToken(account?.shortCollateralRewards ?? [])
-    const stkLyraRewards =
-      stkLyraStakingRewards + stkLyraVaultRewards + stkLyraTradingRewards + stkLyraShortCollatRewards
+    const stkLyraRewards = stkLyraVaultRewards + stkLyraTradingRewards + stkLyraShortCollatRewards
 
     // TODO: @dillon remove flags later
     const isDepositPeriod = global?.isDepositPeriod
@@ -91,7 +89,6 @@ const PendingStakedLyraText = withSuspense(
     const account = epochs?.account
     // TODO: @dillon remove next epoch
     const isDepositPeriod = epochs?.global.isDepositPeriod
-    // Omit staking rewards due to 6mo lock
     const lyraVaultRewards = findLyraRewardEpochToken(account?.totalVaultRewards ?? [])
     const lyraTradingRewards = findLyraRewardEpochToken(account?.tradingRewards ?? [])
     const lyraShortCollatRewards = findLyraRewardEpochToken(account?.shortCollateralRewards ?? [])

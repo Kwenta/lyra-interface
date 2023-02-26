@@ -12,17 +12,17 @@ import useClaimableBalancesL1 from '@/app/hooks/rewards/useClaimableBalanceL1'
 
 type Props = MarginProps
 
-const ClaimStakingRewardsModalContent = withSuspense(
+const ClaimWethLyraStakingRewardsModalContent = withSuspense(
   ({ ...styleProps }: Props) => {
     const claimableBalances = useClaimableBalancesL1()
     return (
-      <Box {...styleProps} mb={4}>
-        {claimableBalances.newStkLyra.gt(0) ? (
-          <Card variant="nested">
+      <Box {...styleProps}>
+        {claimableBalances.lyra.gt(0) ? (
+          <Card variant="nested" mb={6}>
             <CardBody>
               <RowItem
-                label="stkLyra Rewards"
-                value={<TokenAmountText tokenNameOrAddress="stkLyra" amount={claimableBalances.newStkLyra} />}
+                label="Lyra Rewards"
+                value={<TokenAmountText tokenNameOrAddress="lyra" amount={claimableBalances.lyra} />}
               />
             </CardBody>
           </Card>
@@ -33,4 +33,4 @@ const ClaimStakingRewardsModalContent = withSuspense(
   () => <Spinner />
 )
 
-export default ClaimStakingRewardsModalContent
+export default ClaimWethLyraStakingRewardsModalContent

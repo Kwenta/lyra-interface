@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify'
 import { injectStyle } from 'react-toastify/dist/inject-style'
 import { ThemeProvider as InternalThemeProvider } from 'theme-ui'
 
-import { darkTheme, getThemePreset, lightTheme } from '.'
+import { darkTheme } from '.'
 import ModalProvider from './ModalProvider'
 
 type Props = {
@@ -13,8 +13,8 @@ type Props = {
   isLightMode?: boolean
 }
 
-export default function ThemeProvider({ children, isDarkMode = true, isLightMode = false }: Props) {
-  const theme = isDarkMode ? darkTheme : isLightMode ? lightTheme : getThemePreset(true)
+export default function ThemeProvider({ children }: Props) {
+  const theme = darkTheme
 
   useEffect(() => {
     injectStyle()

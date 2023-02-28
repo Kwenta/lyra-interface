@@ -9,6 +9,7 @@ import React, { useCallback, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import { DESKTOP_HEADER_NAV_HEIGHT, DESKTOP_LAYOUT_LARGE_WIDTH } from '@/app/constants/layout'
+import { KWENTA_URL } from '@/app/constants/links'
 import { LogEvent } from '@/app/constants/logEvents'
 import { PageId } from '@/app/constants/pages'
 import AccountButton from '@/app/containers/common/AccountButton'
@@ -55,7 +56,7 @@ export default function LayoutDesktopNav(): JSX.Element {
       >
         <Flex width="100%" px={12} maxWidth={DESKTOP_LAYOUT_LARGE_WIDTH}>
           <Flex alignItems="center" width={SIDE_WIDTH}>
-            <BaseLink display="flex" alignItems="center" href={getPagePath({ page: PageId.Portfolio })}>
+            <BaseLink display="flex" alignItems="center" href={KWENTA_URL}>
               <Image src={getAssetSrc('/images/logo.svg')} height={25} width={157} />
             </BaseLink>
           </Flex>

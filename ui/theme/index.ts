@@ -111,18 +111,18 @@ const lightColors = {
 
 const darkColors = {
   // backgrounds
-  background: '#1A212B',
+  background: '#131312',
   hover: '#3A445033', // 20%
   active: '#3A445066', // 40%
-  cardBg: '#25303BBF', // 75%
+  cardBg: '#181818',
   cardElevatedBg: '#1B252D',
   cardNestedBg: '#3A445099',
   cardNestedHover: '#3e4a56',
 
   // primary button
-  primaryButtonBg: '#57B29C',
-  primaryButtonHover: '#5BBCA5',
-  primaryButtonActive: '#6bc3ae',
+  primaryButtonBg: '#FFB80088',
+  primaryButtonHover: '#2B2A2A',
+  primaryButtonActive: '#FFB800',
 
   // error button
   errorButtonBg: '#FC4D95',
@@ -157,12 +157,12 @@ const darkColors = {
 
   // toggle
   toggleTrackBg: '#3A445099',
-  toggleCheckedTrackBg: '#69D8BD',
+  toggleCheckedTrackBg: '#B1B1B1',
   toggleThumbBg: '#95A4B5',
   toggleCheckedThumbBg: '#FFFFFF',
 
   // charts
-  primaryLine: '#69D8BD',
+  primaryLine: '#B1B1B1',
   primaryArea: '#57B29C26',
   errorLine: '#FC4D95',
   errorArea: '#FC4D9526',
@@ -172,8 +172,8 @@ const darkColors = {
   // spinner
   lightSpinner: '#3A445099',
   lightSpinnerBg: '#3A445033',
-  primarySpinner: '#69D8BD',
-  primarySpinnerBg: '#69D8BD33',
+  primarySpinner: '#B1B1B1',
+  primarySpinnerBg: '#B1B1B133',
   errorSpinner: '#FC4D95',
   errorSpinnerBg: '#FC4D9533',
   warningSpinner: '#de8417',
@@ -187,13 +187,13 @@ const darkColors = {
   secondaryText: '#95A4B5',
   disabledText: '#6B7D94',
   invertedText: '#000000',
-  primaryText: '#69D8BD',
+  primaryText: '#FFFFFF',
   errorText: '#FC4D95',
   warningText: '#de8417',
 
   // link
-  link: '#69D8BD',
-  linkHover: '#a0eedb',
+  link: '#B1B1B1',
+  linkHover: '#B1B1B1FF',
 
   // input
   inputBg: '#3A445099',
@@ -370,12 +370,12 @@ const theme = {
   },
   variants: {
     card: {
-      borderRadius: [0, 'card'],
+      borderRadius: [1, 'card'],
       overflow: 'hidden',
       bg: 'cardBg',
     },
     cardShadowBg: {
-      borderRadius: [0, 'card'],
+      borderRadius: [1, 'card'],
       overflow: 'hidden',
       boxShadow: (theme: Theme) => `0px -4px 72px -16px ${theme.colors ? theme.colors['elevatedShadowBg'] : ''}`,
       bg: 'cardBg',
@@ -865,7 +865,7 @@ const theme = {
   },
 }
 
-export const getThemePreset = (isRoot: boolean, isLightMode: boolean = true): Theme => ({
+export const getThemePreset = (isRoot: boolean, isLightMode: boolean = false): Theme => ({
   useColorSchemeMediaQuery: isRoot ? true : false,
   initialColorModeName: 'light',
   colors: {

@@ -17,7 +17,7 @@ export default function LayoutDesktop({ children }: Props): JSX.Element {
         sx={{
           position: 'fixed',
           top: '0',
-          left: '0',
+          left: '-100%',
           pointerEvents: 'none',
           zIndex: -1,
           transform: 'translate(-50%, -50%)',

@@ -1,4 +1,5 @@
 import Background from '@lyra/ui/components/Background'
+import useIsDarkMode from '@lyra/ui/hooks/useIsDarkMode'
 import React from 'react'
 
 import LayoutDesktopNav from './LayoutDesktopNav'
@@ -8,16 +9,18 @@ type Props = {
 }
 
 export default function LayoutDesktop({ children }: Props): JSX.Element {
+  const [isDarkMode] = useIsDarkMode()
+
   return (
     <>
       <LayoutDesktopNav />
       <Background
-        bg={'background'}
+        bg={isDarkMode ? 'background' : 'bgGradient'}
         mx="auto"
         sx={{
           position: 'fixed',
-          top: '50%',
-          left: '50%',
+          top: '0',
+          left: '0',
           pointerEvents: 'none',
           zIndex: -1,
           transform: 'translate(-50%, -50%)',

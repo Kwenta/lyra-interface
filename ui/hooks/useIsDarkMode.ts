@@ -3,7 +3,7 @@ import { useColorMode } from 'theme-ui'
 
 import emptyFunction from '../utils/emptyFunction'
 
-export default function useIsDarkMode(isDefaultDarkMode?: boolean): [boolean, Dispatch<boolean>] {
+export default function useIsDarkMode(isDefaultDarkMode: boolean = true): [boolean, Dispatch<boolean>] {
   try {
     const [colorMode, setColorMode] = useColorMode<'dark' | 'light'>('dark')
     const isDarkMode = colorMode === 'dark'

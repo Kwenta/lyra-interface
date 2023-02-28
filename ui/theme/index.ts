@@ -867,7 +867,7 @@ const theme = {
 
 export const getThemePreset = (isRoot: boolean, isLightMode: boolean = false): Theme => ({
   useColorSchemeMediaQuery: isRoot ? true : false,
-  initialColorModeName: 'light',
+  initialColorModeName: 'dark',
   colors: {
     ...(isLightMode ? lightColors : darkColors),
     modes: isLightMode

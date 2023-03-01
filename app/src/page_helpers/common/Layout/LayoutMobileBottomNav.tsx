@@ -2,6 +2,7 @@ import DropdownButtonListItem from '@lyra/ui/components/Button/DropdownButtonLis
 import Flex from '@lyra/ui/components/Flex'
 import Icon, { IconType } from '@lyra/ui/components/Icon'
 import Image from '@lyra/ui/components/Image'
+import BaseLink from '@lyra/ui/components/Link/BaseLink'
 import List from '@lyra/ui/components/List'
 import Modal from '@lyra/ui/components/Modal'
 import Token from '@lyra/ui/components/Token'
@@ -10,6 +11,7 @@ import React, { useCallback, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { MOBILE_FOOTER_HEIGHT } from '@/app/constants/layout'
+import { KWENTA_URL } from '@/app/constants/links'
 import { PageId } from '@/app/constants/pages'
 import AccountButton from '@/app/containers/common/AccountButton'
 import useNetwork from '@/app/hooks/account/useNetwork'
@@ -82,12 +84,9 @@ export default function LayoutMobileBottomNav(): JSX.Element {
       <Modal isMobileFullscreen isOpen={isOpen} onClose={onClose}>
         <Flex flexDirection="column" minHeight="100%">
           <Flex sx={{ position: 'sticky', top: 0, left: 0, right: 0, bg: 'cardBackrgoundSolid' }} p={6}>
-            <Image
-              href={getPagePath({ page: PageId.Portfolio })}
-              src={getAssetSrc('/images/logo.svg')}
-              height={24}
-              width={24}
-            />
+            <BaseLink href={KWENTA_URL}>
+              <Image src={getAssetSrc('/images/logo.svg')} height={24} width={157} />
+            </BaseLink>
             {!isMainnet() ? <Token ml="auto" variant="warning" label="Testnet" /> : null}
           </Flex>
           <List mt="auto">

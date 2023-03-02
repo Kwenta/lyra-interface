@@ -105,8 +105,16 @@ export default function LayoutDesktopNav(): JSX.Element {
             >
               Rewards
             </Link>
-            <Link textVariant="bodyMedium" variant="secondary" mx={4} href={KWENTA_URL} color={'secondaryText'}>
+            <Link
+              textVariant="bodyMedium"
+              variant="secondary"
+              mx={4}
+              href={KWENTA_URL}
+              color={'secondaryText'}
+              sx={{ display: 'flex', alignItems: 'center' }}
+            >
               Futures
+              <Image src={getAssetSrc('/images/logo-yellow.svg')} height={12} ml={1} />
             </Link>
           </Flex>
           <Flex width={SIDE_WIDTH} justifyContent={'flex-end'} alignItems={'center'}>

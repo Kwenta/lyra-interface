@@ -78,7 +78,7 @@ export default function LayoutDesktopNav(): JSX.Element {
               variant="secondary"
               sx={{ display: 'flex', alignItems: 'center' }}
             >
-              Markets
+              Futures
               <Image src={getAssetSrc('/images/logo-yellow.svg')} height={12} ml={1} />
             </Link>
             <DropdownButton

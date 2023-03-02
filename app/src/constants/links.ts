@@ -21,6 +21,10 @@ export const UNISWAP_URL = 'https://app.uniswap.org'
 export const ONE_INCH_URL = 'https://app.1inch.io'
 export const SOCKET_URL = 'https://www.bungee.exchange/'
 export const TWITTER_URL = 'https://twitter.com'
+export const KWENTA_MARKETS_URL = 'https://kwenta.eth.limo/market/?asset=sETH&accountType=isolated_margin'
+export const KWENTA_DASHBOARD_URL = 'https://kwenta.eth.limo/dashboard'
+export const KWENTA_EXCHANGE_URL = 'https://kwenta.eth.limo/exchange'
+export const KWENTA_LEADERBOARD_URL = 'https://kwenta.eth.limo/leaderboard'
 
 export const TERMS_OF_USE_URL = 'https://www.lyra.finance/terms-of-use'
 
@@ -44,7 +48,7 @@ export const SHORT_COLLATERAL_REWARDS_DOC_URL =
   'https://docs.lyra.finance/governance/incentives#short-collateral-rewards'
 export const TRADING_CUTOFF_DOC_URL = 'https://docs.lyra.finance/overview/how-does-lyra-work/trading#trading-cutoffs'
 
-export const SWAP_SYNTH_1INCH_URL = 'https://app.1inch.io/#/10/unified/swap/ETH/'
+export const SWAP_TOKEN_1INCH_URL = 'https://app.1inch.io/#/10/simple/swap/ETH'
 
 export const WETH_LYRA_L2_LIQUIDITY_URL =
   'https://beta.arrakis.finance/vaults/10/0x70535C46ce04181adf749f34B65B6365164d6B6E'

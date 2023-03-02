@@ -12,6 +12,7 @@ export type ListItemProps = {
   label: React.ReactNode | string
   sublabel?: React.ReactNode | string | null
   icon?: IconType | string | React.ReactNode | null
+  rightIcon?: IconType | string | React.ReactNode | null
   rightContent?: IconType | string | React.ReactNode | null
   onClick?: (e: any) => void
   isDisabled?: boolean
@@ -26,6 +27,7 @@ export default function ListItem({
   label,
   sublabel,
   icon,
+  rightIcon,
   rightContent,
   onClick,
   isDisabled,
@@ -69,7 +71,7 @@ export default function ListItem({
               {typeof icon === 'string' ? <IconOrImage src={icon} size={18} color="currentColor" /> : icon}
             </Center>
           ) : null}
-          <Flex flexGrow={1} flexDirection="column">
+          <Flex flexGrow={rightIcon ? 0 : 1} flexDirection="row" alignItems="center">
             {typeof label === 'string' || typeof label === 'number' ? (
               <Text variant={isMobile ? 'secondary' : 'body'} sx={{ transition: 'all 0.05s ease-out' }}>
                 {label}
@@ -83,6 +85,7 @@ export default function ListItem({
               ) : (
                 sublabel
               ))}
+            {typeof rightIcon === 'string' ? <IconOrImage src={rightIcon} size={18} color="currentColor" /> : rightIcon}
           </Flex>
           {rightContent ? (
             <Center height="100%" pl={3}>

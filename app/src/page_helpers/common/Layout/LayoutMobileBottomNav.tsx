@@ -121,7 +121,7 @@ export default function LayoutMobileBottomNav(): JSX.Element {
             <DropdownButtonListItem
               onClick={() => window.open(KWENTA_URL, '_blank', 'noopener')}
               label="Futures"
-              icon={<Image src={getAssetSrc('/images/logo-yellow.svg')} height={20} />}
+              rightIcon={<Image src={getAssetSrc('/images/logo-yellow.svg')} height={24} ml={2} />}
             />
             <DropdownButtonListItem
               onClick={() => setIsMoreOpen(!isMoreOpen)}

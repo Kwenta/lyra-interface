@@ -17,7 +17,7 @@ export default function TableRowMarker({ content, ...styleProps }: TableRowMarke
         justifyContent="center"
         px={3}
         py={1}
-        bg="primaryButtonBg"
+        bg="primaryButtonActive"
         sx={{
           borderRadius: 'card',
           boxShadow: '10px 10px 10px elevatedShadowBg',

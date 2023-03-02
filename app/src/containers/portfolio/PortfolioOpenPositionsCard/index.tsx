@@ -58,6 +58,7 @@ const PortfolioOpenPositionsCard = ({ openPositions }: Props): CardElement => {
             </Text>
             <Button
               variant="primary"
+              textColor="primaryText"
               label="Start Trading"
               width={200}
               size="lg"

@@ -1,39 +1,32 @@
-import { AccountLyraBalances, AccountRewardEpoch, Network, RewardEpochTokenAmount } from '@lyrafinance/lyra-js'
+import { AccountRewardEpoch, Market, Network, RewardEpochTokenAmount } from '@lyrafinance/lyra-js'
 
-import { ZERO_ADDRESS, ZERO_BN } from '../constants/bn'
+import { ZERO_ADDRESS } from '../constants/bn'
 import { Vault } from '../constants/vault'
+import { EMPTY_LYRA_BALANCES } from '../hooks/account/useAccountLyraBalances'
 import fromBigNumber from './fromBigNumber'
 import getEmptyMarketBalances from './getEmpyMarketBalances'
 import getLyraSDK from './getLyraSDK'
+import isMarketEqual from './isMarketEqual'
 
 const EMPTY_APY: RewardEpochTokenAmount[] = []
 
-const EMPTY_LYRA_BALANCE: AccountLyraBalances = {
-  ethereumLyra: ZERO_BN,
-  optimismLyra: ZERO_BN,
-  optimismOldStkLyra: ZERO_BN,
-  ethereumStkLyra: ZERO_BN,
-  optimismStkLyra: ZERO_BN,
-}
-
-const fetchVault = async (network: Network, marketAddressOrName: string, walletAddress?: string): Promise<Vault> => {
+const fetchVault = async (network: Network, market: Market, walletAddress?: string): Promise<Vault> => {
   const lyra = getLyraSDK(network)
-  const market = await lyra.market(marketAddressOrName)
   const account = lyra.account(walletAddress ?? ZERO_ADDRESS)
 
-  const fetchAccountBalances = async () =>
-    account ? account.marketBalances(marketAddressOrName) : getEmptyMarketBalances(ZERO_ADDRESS, market)
+  const fetchLyraBalances = async () => (account ? account.lyraBalances() : EMPTY_LYRA_BALANCES)
 
-  const fetchLyraBalances = async () => (account ? account.lyraBalances() : EMPTY_LYRA_BALANCE)
-
-  const [marketLiquidity, globalRewardEpoch, marketBalances, lyraBalances, deposits, withdrawals] = await Promise.all([
+  const [marketLiquidity, globalRewardEpoch, balances, lyraBalances, deposits, withdrawals] = await Promise.all([
     market.liquidity(),
     lyra.latestGlobalRewardEpoch(),
-    fetchAccountBalances(),
+    account.balances(),
     fetchLyraBalances(),
-    account.liquidityDeposits(marketAddressOrName),
-    account.liquidityWithdrawals(marketAddressOrName),
+    lyra.liquidityDeposits(market.address, account.address),
+    lyra.liquidityWithdrawals(market.address, account.address),
   ])
+  const marketBalances =
+    balances.find(balance => isMarketEqual(balance.market, market.address)) ??
+    getEmptyMarketBalances(ZERO_ADDRESS, market)
 
   const pendingDeposits = deposits.filter(d => d.isPending)
   const pendingWithdrawals = withdrawals.filter(w => w.isPending)
@@ -43,10 +36,10 @@ const fetchVault = async (network: Network, marketAddressOrName: string, walletA
     accountRewardEpoch = await globalRewardEpoch.accountRewardEpoch(walletAddress)
   }
 
-  const minApy = globalRewardEpoch?.minVaultApy(marketAddressOrName) ?? EMPTY_APY
-  const maxApy = globalRewardEpoch?.maxVaultApy(marketAddressOrName) ?? EMPTY_APY
-  const apy = accountRewardEpoch?.vaultApy(marketAddressOrName) ?? minApy
-  const apyMultiplier = accountRewardEpoch?.vaultApyMultiplier(marketAddressOrName) ?? 1
+  const minApy = globalRewardEpoch?.minVaultApy(market.address) ?? EMPTY_APY
+  const maxApy = globalRewardEpoch?.maxVaultApy(market.address) ?? EMPTY_APY
+  const apy = accountRewardEpoch?.vaultApy(market.address) ?? minApy
+  const apyMultiplier = accountRewardEpoch?.vaultApyMultiplier(market.address) ?? 1
 
   const liquidityToken = marketBalances.liquidityToken
 

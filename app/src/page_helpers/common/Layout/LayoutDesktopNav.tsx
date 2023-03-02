@@ -105,6 +105,9 @@ export default function LayoutDesktopNav(): JSX.Element {
             >
               Rewards
             </Link>
+            <Link textVariant="bodyMedium" variant="secondary" mx={4} href={KWENTA_URL} color={'secondaryText'}>
+              Futures
+            </Link>
           </Flex>
           <Flex width={SIDE_WIDTH} justifyContent={'flex-end'} alignItems={'center'}>
             <AccountButton mr={2} />

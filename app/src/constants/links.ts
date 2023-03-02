@@ -21,7 +21,7 @@ export const UNISWAP_URL = 'https://app.uniswap.org'
 export const ONE_INCH_URL = 'https://app.1inch.io'
 export const SOCKET_URL = 'https://www.bungee.exchange/'
 export const TWITTER_URL = 'https://twitter.com'
-export const KWENTA_URL = 'https://kwenta.eth.limo'
+export const KWENTA_URL = 'https://kwenta.eth.limo/market'
 
 export const TERMS_OF_USE_URL = 'https://www.lyra.finance/terms-of-use'
 

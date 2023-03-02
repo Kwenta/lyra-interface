@@ -113,7 +113,7 @@ export default function LayoutMobileBottomNav(): JSX.Element {
             />
             <DropdownButtonListItem
               onClick={() => {
-                navigate(getPagePath({ page: PageId.Rewards }))
+                navigate(getPagePath({ page: PageId.RewardsIndex }))
                 onClose()
               }}
               label="Rewards"

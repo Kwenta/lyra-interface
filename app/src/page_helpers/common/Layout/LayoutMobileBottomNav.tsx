@@ -89,7 +89,7 @@ export default function LayoutMobileBottomNav(): JSX.Element {
             </BaseLink>
             {!isMainnet() ? <Token ml="auto" variant="warning" label="Testnet" /> : null}
           </Flex>
-          <List mt="auto">
+          <List mt="auto" mb={6}>
             <DropdownButtonListItem
               onClick={() => {
                 navigate(getPagePath({ page: PageId.Portfolio }))
@@ -117,6 +117,11 @@ export default function LayoutMobileBottomNav(): JSX.Element {
                 onClose()
               }}
               label="Rewards"
+            />
+            <DropdownButtonListItem
+              onClick={() => window.open(KWENTA_URL, '_blank', 'noopener')}
+              label="Futures"
+              icon={<Image src={getAssetSrc('/images/logo-yellow.svg')} height={20} />}
             />
             <DropdownButtonListItem
               onClick={() => setIsMoreOpen(!isMoreOpen)}

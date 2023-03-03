@@ -18,6 +18,8 @@ export type TextVariant =
   | 'secondaryMedium'
   | 'small'
   | 'smallMedium'
+  | 'navBody'
+  | 'nav'
 
 export type TextColor =
   | 'white'

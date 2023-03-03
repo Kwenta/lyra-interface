@@ -67,14 +67,14 @@ export default function LayoutDesktopNav(): JSX.Element {
             </BaseLink>
           </Flex>
           <Flex flexGrow={1} alignItems={'center'} justifyContent={'flex-start'}>
-            <Link mx={4} href={KWENTA_DASHBOARD_URL} textVariant="bodyMedium" variant="secondary">
+            <Link mx={4} href={KWENTA_DASHBOARD_URL} textVariant="nav" variant="secondary">
               Dashboard
             </Link>
             <Link
               mx={6}
               mr={8}
               href={KWENTA_MARKETS_URL}
-              textVariant="bodyMedium"
+              textVariant="nav"
               variant="secondary"
               sx={{ display: 'flex', alignItems: 'center' }}
             >
@@ -85,6 +85,7 @@ export default function LayoutDesktopNav(): JSX.Element {
               isOpen={isKwentaOpen}
               onClose={onKwentaClose}
               onClick={() => setKwentaOpen(true)}
+              textVariant="nav"
               label="Options"
               sx={{ width: '100px' }}
             >
@@ -113,10 +114,10 @@ export default function LayoutDesktopNav(): JSX.Element {
                 onClick={() => logEvent(LogEvent.NavStakeTabClick)}
               />
             </DropdownButton>
-            <Link textVariant="bodyMedium" variant="secondary" mx={6} ml={8} href={KWENTA_EXCHANGE_URL}>
+            <Link textVariant="nav" variant="secondary" mx={6} ml={8} href={KWENTA_EXCHANGE_URL}>
               Exchange
             </Link>
-            <Link textVariant="bodyMedium" variant="secondary" mx={4} href={KWENTA_LEADERBOARD_URL}>
+            <Link textVariant="nav" variant="secondary" mx={4} href={KWENTA_LEADERBOARD_URL}>
               Leaderboard
             </Link>
           </Flex>

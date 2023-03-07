@@ -28,7 +28,7 @@ import logEvent from '@/app/utils/logEvent'
 import LayoutMoreDropdownListItems from './LayoutMoreDropdownListItems'
 import LayoutPrivacyModal from './LayoutPrivacyModal'
 
-const SIDE_WIDTH = 320
+const SIDE_WIDTH = 330
 const LOGO_SIDE_WIDTH = 160
 
 export default function LayoutDesktopNav(): JSX.Element {

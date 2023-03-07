@@ -71,7 +71,7 @@ export const getButtonSizeSx = (size: ButtonSize): Record<string, string | numbe
         fontSize: '15px',
         lineHeight: '15px',
         minHeight: '36px',
-        borderRadius: '18px',
+        borderRadius: '100px',
         p: 0,
       }
     case 'large':

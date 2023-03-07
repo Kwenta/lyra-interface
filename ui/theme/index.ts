@@ -118,10 +118,10 @@ const darkColors = {
   active: '#3A445066', // 40%
   cardBg: '#181818',
   cardHoverBg: '#313c47', // 75%
-  cardElevatedBg: '#1B252D',
+  cardElevatedBg: '#1D1D1D',
   cardNestedBg: '#3A445099',
   cardNestedHover: '#2D3741',
-  cardOutline: '#3A4047',
+  cardOutline: '#FFFFFF1a',
 
   // primary button
   primaryButtonBg: '#FFB80088',
@@ -139,9 +139,9 @@ const darkColors = {
   warningButtonActive: '#c27414',
 
   // default button
-  buttonBg: '#3A445099', // 60%
-  buttonHover: '#3A424BCC', // 80%
-  buttonActive: '#3A424B', // 100%
+  buttonBg: '#131312', // 60%
+  buttonHover: '#252525', // 80%
+  buttonActive: '#252525', // 100%
   disabledButtonBg: '#3A445099',
 
   // dark button

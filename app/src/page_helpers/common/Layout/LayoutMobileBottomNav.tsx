@@ -127,7 +127,7 @@ export default function LayoutMobileBottomNav(): JSX.Element {
             <DropdownButtonListItem
               onClick={() => setKwentaOpen(!isKwentaOpen)}
               label="Futures"
-              rightIcon={<Image src={getAssetSrc('/images/logo-yellow.svg')} height={24} ml={2} />}
+              rightIcon={<Image src={getAssetSrc('/images/logo-no-text.svg')} height={24} ml={2} />}
             />
             <DropdownButtonListItem
               onClick={() => setIsMoreOpen(!isMoreOpen)}

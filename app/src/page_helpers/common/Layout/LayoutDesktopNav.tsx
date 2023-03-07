@@ -79,7 +79,7 @@ export default function LayoutDesktopNav(): JSX.Element {
               sx={{ display: 'flex', alignItems: 'center' }}
             >
               Futures
-              <Image src={getAssetSrc('/images/logo-yellow.svg')} height={12} ml={1} />
+              <Image src={getAssetSrc('/images/logo-no-text.svg')} height={12} ml={1} />
             </Link>
             <DropdownButton
               isOpen={isKwentaOpen}

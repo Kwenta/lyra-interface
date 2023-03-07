@@ -67,7 +67,7 @@ export default function LayoutDesktopNav(): JSX.Element {
             </BaseLink>
           </Flex>
           <Flex flexGrow={1} alignItems={'center'} justifyContent={'flex-start'}>
-            <Link mx={4} href={KWENTA_DASHBOARD_URL} textVariant="nav" variant="secondary">
+            <Link mx={4} href={KWENTA_DASHBOARD_URL} textVariant="nav" color="navText" variant="secondary">
               Dashboard
             </Link>
             <Link
@@ -76,10 +76,11 @@ export default function LayoutDesktopNav(): JSX.Element {
               href={KWENTA_MARKETS_URL}
               textVariant="nav"
               variant="secondary"
+              color="navText"
               sx={{ display: 'flex', alignItems: 'center' }}
             >
               Futures
-              <Image src={getAssetSrc('/images/logo-no-text.svg')} height={12} ml={1} />
+              <Image src={getAssetSrc('/images/logo-yellow.svg')} height={12} ml={1} />
             </Link>
             <DropdownButton
               isOpen={isKwentaOpen}
@@ -87,6 +88,9 @@ export default function LayoutDesktopNav(): JSX.Element {
               onClick={() => setKwentaOpen(true)}
               textVariant="nav"
               label="Options"
+              textColor="white"
+              pl={1}
+              pr={1}
               sx={{ width: '100px' }}
             >
               <DropdownButtonListItem
@@ -114,10 +118,10 @@ export default function LayoutDesktopNav(): JSX.Element {
                 onClick={() => logEvent(LogEvent.NavStakeTabClick)}
               />
             </DropdownButton>
-            <Link textVariant="nav" variant="secondary" mx={6} ml={8} href={KWENTA_EXCHANGE_URL}>
+            <Link textVariant="nav" variant="secondary" color="navText" mx={6} ml={8} href={KWENTA_EXCHANGE_URL}>
               Exchange
             </Link>
-            <Link textVariant="nav" variant="secondary" mx={4} href={KWENTA_LEADERBOARD_URL}>
+            <Link textVariant="nav" variant="secondary" color="navText" mx={4} href={KWENTA_LEADERBOARD_URL}>
               Leaderboard
             </Link>
           </Flex>

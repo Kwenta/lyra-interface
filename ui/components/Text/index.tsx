@@ -18,7 +18,6 @@ export type TextVariant =
   | 'secondaryMedium'
   | 'small'
   | 'smallMedium'
-  | 'navBody'
   | 'nav'
 
 export type TextColor =
@@ -31,6 +30,7 @@ export type TextColor =
   | 'disabledText'
   | 'invertedText'
   | 'inherit'
+  | 'navText'
 
 export type TextBaseProps = {
   variant?: TextVariant

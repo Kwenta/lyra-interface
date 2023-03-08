@@ -66,7 +66,7 @@ const ConnectWalletButton = withSuspense(
       buttonLabel = 'Connect Wallet'
     }
 
-    const variant = isOverride ? 'warning' : 'primary'
+    const variant = 'primary'
 
     const onClick = async () => {
       if (isOverride) {

@@ -223,7 +223,7 @@ const darkColors = {
 
 const theme = {
   fonts: {
-    body: "'Inter var', -apple-system, BlinkMacSystemFont, sans-serif",
+    body: "'Inter var', sans-serif",
     heading: "'Sohne', sans-serif",
     monospace: 'Menlo, monospace',
   },

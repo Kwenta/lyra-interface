@@ -123,7 +123,7 @@ export default function LayoutDesktopNav(): JSX.Element {
               onClose={onMoreClose}
               onClick={() => setIsMoreOpen(true)}
               icon={IconType.MoreHorizontal}
-              variant={isDarkMode ? 'static' : 'white'}
+              variant={'static'}
             >
               <LayoutMoreDropdownListItems onClose={onMoreClose} onClickPrivacy={() => setIsPrivacyOpen(true)} />
             </DropdownIconButton>

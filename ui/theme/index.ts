@@ -194,7 +194,6 @@ const darkColors = {
   primaryText: '#FFFFFF',
   errorText: '#FC4D95',
   warningText: '#de8417',
-  navText: '#787878',
 
   // link
   link: '#B1B1B1',
@@ -224,11 +223,9 @@ const darkColors = {
 
 const theme = {
   fonts: {
-    body: "'Inter Var', -apple-system, BlinkMacSystemFont, sans-serif",
+    body: "'Inter var', -apple-system, BlinkMacSystemFont, sans-serif",
     heading: "'Sohne', sans-serif",
     monospace: 'Menlo, monospace',
-    nav: "'AkkuratLLWeb-Regular'",
-    navBold: "'AkkuratLLWeb-Bold'",
   },
   fontSizes: ['12px', '14px', '15px', '18px', '22px', '28px', '34px', '42px', '60px', '72px'],
   lineHeights: {
@@ -346,12 +343,6 @@ const theme = {
       fontSize: 2,
       letterSpacing: 'body',
     },
-    nav: {
-      fontFamily: 'navBold',
-      lineHeight: 'body',
-      fontSize: 2,
-      letterSpacing: 'body',
-    },
     secondary: {
       fontFamily: 'body',
       fontWeight: 'body',
@@ -367,14 +358,14 @@ const theme = {
       letterSpacing: 'secondary',
     },
     small: {
-      fontFamily: 'monospace',
+      fontFamily: 'body',
       fontWeight: 'body',
       lineHeight: 'small',
       fontSize: 0,
       letterSpacing: 'small',
     },
     smallMedium: {
-      fontFamily: 'monospace',
+      fontFamily: 'body',
       fontWeight: 'medium',
       lineHeight: 'small',
       fontSize: 0,

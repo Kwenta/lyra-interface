@@ -1,5 +1,3 @@
-import DropdownButton from '@lyra/ui/components/Button/DropdownButton'
-import DropdownButtonListItem from '@lyra/ui/components/Button/DropdownButtonListItem'
 import DropdownIconButton from '@lyra/ui/components/Button/DropdownIconButton'
 import Flex from '@lyra/ui/components/Flex'
 import { IconType } from '@lyra/ui/components/Icon'
@@ -16,14 +14,9 @@ import {
   KWENTA_LEADERBOARD_URL,
   KWENTA_MARKETS_URL,
 } from '@/app/constants/links'
-import { LogEvent } from '@/app/constants/logEvents'
-import { PageId } from '@/app/constants/pages'
 import AccountButton from '@/app/containers/common/AccountButton'
 import useNetwork from '@/app/hooks/account/useNetwork'
 import getAssetSrc from '@/app/utils/getAssetSrc'
-import { getDefaultMarket } from '@/app/utils/getDefaultMarket'
-import getPagePath from '@/app/utils/getPagePath'
-import logEvent from '@/app/utils/logEvent'
 
 import LayoutMoreDropdownListItems from './LayoutMoreDropdownListItems'
 import LayoutPrivacyModal from './LayoutPrivacyModal'
@@ -67,62 +60,28 @@ export default function LayoutDesktopNav(): JSX.Element {
             </BaseLink>
           </Flex>
           <Flex flexGrow={1} alignItems={'center'} justifyContent={'flex-start'}>
-            <Link mx={4} href={KWENTA_DASHBOARD_URL} textVariant="nav" color="navText" variant="secondary">
-              Dashboard
+            <Link mx={4} href={KWENTA_DASHBOARD_URL} textVariant="bodyMedium" variant="secondary">
+              Portfolio
             </Link>
             <Link
               mx={6}
               mr={8}
               href={KWENTA_MARKETS_URL}
-              textVariant="nav"
+              textVariant="bodyMedium"
               variant="secondary"
-              color="navText"
               sx={{ display: 'flex', alignItems: 'center' }}
             >
-              Futures
+              Trade
               <Image src={getAssetSrc('/images/logo-yellow.svg')} height={12} ml={1} />
             </Link>
-            <DropdownButton
-              isOpen={isKwentaOpen}
-              onClose={onKwentaClose}
-              onClick={() => setKwentaOpen(true)}
-              textVariant="nav"
-              label="Options"
-              textColor="white"
-              pl={1}
-              pr={1}
-              sx={{ width: '100px' }}
-            >
-              <DropdownButtonListItem
-                label="Portfolio"
-                href={getPagePath({ page: PageId.Portfolio })}
-                onClick={() => logEvent(LogEvent.NavPortfolioTabClick)}
-              />
-              <DropdownButtonListItem
-                label="Trade"
-                href={getPagePath({
-                  page: PageId.Trade,
-                  network,
-                  marketAddressOrName: getDefaultMarket(network),
-                })}
-                onClick={() => logEvent(LogEvent.NavTradeTabClick)}
-              />
-              <DropdownButtonListItem
-                label="Vaults"
-                href={getPagePath({ page: PageId.VaultsIndex })}
-                onClick={() => logEvent(LogEvent.NavVaultsTabClick)}
-              />
-              <DropdownButtonListItem
-                label="Rewards"
-                href={getPagePath({ page: PageId.RewardsIndex })}
-                onClick={() => logEvent(LogEvent.NavStakeTabClick)}
-              />
-            </DropdownButton>
-            <Link textVariant="nav" variant="secondary" color="navText" mx={6} ml={8} href={KWENTA_EXCHANGE_URL}>
-              Exchange
+            <Link textVariant="bodyMedium" variant="secondary" mx={6} ml={8} href={KWENTA_EXCHANGE_URL}>
+              Vaults
             </Link>
-            <Link textVariant="nav" variant="secondary" color="navText" mx={4} href={KWENTA_LEADERBOARD_URL}>
-              Leaderboard
+            <Link textVariant="bodyMedium" variant="secondary" mx={4} href={KWENTA_LEADERBOARD_URL}>
+              Rewards
+            </Link>
+            <Link textVariant="bodyMedium" variant="secondary" mx={4} href={KWENTA_LEADERBOARD_URL}>
+              Futures
             </Link>
           </Flex>
           <Flex width={SIDE_WIDTH} justifyContent={'flex-end'} alignItems={'center'}>

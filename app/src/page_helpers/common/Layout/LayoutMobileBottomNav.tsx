@@ -11,12 +11,7 @@ import React, { useCallback, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { MOBILE_FOOTER_HEIGHT } from '@/app/constants/layout'
-import {
-  KWENTA_DASHBOARD_URL,
-  KWENTA_EXCHANGE_URL,
-  KWENTA_LEADERBOARD_URL,
-  KWENTA_MARKETS_URL,
-} from '@/app/constants/links'
+import { KWENTA_MARKETS_URL } from '@/app/constants/links'
 import { PageId } from '@/app/constants/pages'
 import AccountButton from '@/app/containers/common/AccountButton'
 import useNetwork from '@/app/hooks/account/useNetwork'
@@ -32,7 +27,6 @@ export default function LayoutMobileBottomNav(): JSX.Element {
   const navigate = useNavigate()
   const network = useNetwork()
   const [isOpen, setIsOpen] = useState(false)
-  const [isKwentaOpen, setKwentaOpen] = useState(false)
   const [isMoreOpen, setIsMoreOpen] = useState(false)
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
   const onClose = useCallback(() => setIsOpen(false), [])
@@ -125,31 +119,21 @@ export default function LayoutMobileBottomNav(): JSX.Element {
               label="Rewards"
             />
             <DropdownButtonListItem
-              onClick={() => setKwentaOpen(!isKwentaOpen)}
-              label="Futures"
-              rightIcon={<Image src={getAssetSrc('/images/logo-yellow.svg')} height={24} ml={2} />}
-            />
-            <DropdownButtonListItem
               onClick={() => setIsMoreOpen(!isMoreOpen)}
               label="More"
               rightContent={<Icon icon={IconType.ChevronRight}></Icon>}
             />
-          </List>
-        </Flex>
-      </Modal>
-      <Modal isMobileFullscreen isOpen={isKwentaOpen} onClose={() => setKwentaOpen(false)}>
-        <Flex flexDirection="column" height="100%">
-          <List mt="auto" mb={6}>
-            <DropdownButtonListItem label="Dashboard" target="_blank" href={KWENTA_DASHBOARD_URL} />
-            <DropdownButtonListItem label="Markets" target="_blank" href={KWENTA_MARKETS_URL} />
-            <DropdownButtonListItem label="Exchange" target="_blank" href={KWENTA_EXCHANGE_URL} />
-            <DropdownButtonListItem label="Leaderboard" target="_blank" href={KWENTA_LEADERBOARD_URL} />
+            <DropdownButtonListItem
+              href={KWENTA_MARKETS_URL}
+              label="Futures"
+              rightIcon={<Image src={getAssetSrc('/images/link-light.svg')} height={20} ml={2} />}
+            />
           </List>
         </Flex>
       </Modal>
       <Modal isMobileFullscreen isOpen={isMoreOpen} onClose={() => setIsMoreOpen(false)}>
         <Flex flexDirection="column" height="100%">
-          <List mt="auto">
+          <List mt="auto" mb={6}>
             <LayoutMoreDropdownListItems
               onClose={() => setIsMoreOpen(false)}
               onClickPrivacy={() => setIsPrivacyOpen(true)}

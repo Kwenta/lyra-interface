@@ -21,7 +21,7 @@ function PortfolioOnboardingCard() {
       <CardSection justifyContent="center" alignItems="center" height="100%" width="100%">
         <Image src={getAssetSrc('/images/logo.svg')} mb={4} height={25} width={157} />
         <Text variant="title" mb={2}>
-          Option Markets
+          Options Markets
         </Text>
         <Text variant="heading" color="secondaryText" mb={4}>
           Powered by

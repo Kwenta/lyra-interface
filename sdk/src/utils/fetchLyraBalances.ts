@@ -1,10 +1,12 @@
 import { BigNumber } from 'ethers'
 
 import { AccountLyraBalances } from '../account'
-import { LYRA_API_URL } from '../constants/links'
+import Lyra from '../lyra'
 import fetchWithCache from './fetchWithCache'
+import isTestnet from './isTestnet'
 
-export default async function fetchLyraBalances(owner: string): Promise<AccountLyraBalances> {
+export default async function fetchLyraBalances(lyra: Lyra, owner: string): Promise<AccountLyraBalances> {
+  const testnet = isTestnet(lyra)
   const data = await fetchWithCache<{
     mainnetLYRA: string
     opLYRA: string
@@ -13,9 +15,8 @@ export default async function fetchLyraBalances(owner: string): Promise<AccountL
     mainnetStkLYRA: string
     opStkLYRA: string
     arbitrumStkLYRA: string
-    migrationAllowance: string
     stakingAllowance: string
-  }>(`${LYRA_API_URL}/lyra-balances?&owner=${owner}`)
+  }>(`${lyra.apiUri}/lyra-balances?&owner=${owner}&testnet=${testnet}`)
   return {
     ethereumLyra: BigNumber.from(data.mainnetLYRA),
     optimismLyra: BigNumber.from(data.opLYRA),
@@ -24,7 +25,6 @@ export default async function fetchLyraBalances(owner: string): Promise<AccountL
     ethereumStkLyra: BigNumber.from(data.mainnetStkLYRA),
     optimismStkLyra: BigNumber.from(data.opStkLYRA),
     arbitrumStkLyra: BigNumber.from(data.arbitrumStkLYRA),
-    migrationAllowance: BigNumber.from(data.migrationAllowance),
     stakingAllowance: BigNumber.from(data.stakingAllowance),
   }
 }

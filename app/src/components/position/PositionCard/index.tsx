@@ -11,10 +11,10 @@ import React, { useState } from 'react'
 
 import PositionStatusText from '@/app/components/common/PositionStatusText'
 import { UNIT, ZERO_BN } from '@/app/constants/bn'
-import ShortYieldValue from '@/app/containers/common/ShortYieldValue'
 import TradeCollateralFormModal from '@/app/containers/trade/TradeCollateralFormModal'
 import TradeFormModal from '@/app/containers/trade/TradeFormModal'
 import useWallet from '@/app/hooks/account/useWallet'
+import isDev from '@/app/utils/isDev'
 
 import LabelItem from '../../common/LabelItem'
 
@@ -71,14 +71,8 @@ const PositionCard = ({ position, option }: Props): JSX.Element | null => {
               value={position.collateral?.liquidationPrice ? formatUSD(position.collateral.liquidationPrice) : 'None'}
             />
           ) : null}
-          {position.isOpen && !position.isLong ? (
-            <LabelItem
-              label="Yield / Day"
-              value={<ShortYieldValue textVariant="secondary" tradeOrPosition={position} option={option} />}
-            />
-          ) : null}
         </Grid>
-        {isOwner && position.isOpen ? (
+        {(isOwner || isDev()) && position.isOpen ? (
           <Grid mt={8} sx={{ gridTemplateColumns: ['1fr', '1fr 1fr 1fr 1fr 1fr'], gap: [3, 6] }}>
             <Button
               variant="primary"
@@ -100,12 +94,15 @@ const PositionCard = ({ position, option }: Props): JSX.Element | null => {
                 setIsTradeFormOpen(true)
               }}
             />
-            <Button
-              variant="default"
-              size="lg"
-              label="Adjust Collateral"
-              onClick={() => setIsCollateralFormOpen(true)}
-            />
+            {!position.isLong ? (
+              <Button
+                variant="light"
+                isOutline
+                size="lg"
+                label="Adjust Collateral"
+                onClick={() => setIsCollateralFormOpen(true)}
+              />
+            ) : null}
           </Grid>
         ) : null}
       </CardBody>

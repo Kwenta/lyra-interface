@@ -4,20 +4,17 @@ import { IconType } from '@lyra/ui/components/Icon'
 import Image from '@lyra/ui/components/Image'
 import Link from '@lyra/ui/components/Link'
 import BaseLink from '@lyra/ui/components/Link/BaseLink'
-import useIsDarkMode from '@lyra/ui/hooks/useIsDarkMode'
 import React, { useCallback, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import { DESKTOP_HEADER_NAV_HEIGHT, DESKTOP_LAYOUT_LARGE_WIDTH } from '@/app/constants/layout'
 import { KWENTA_MARKETS_URL } from '@/app/constants/links'
 import { LogEvent } from '@/app/constants/logEvents'
-import { PageId } from '@/app/constants/pages'
 import AccountButton from '@/app/containers/common/AccountButton'
 import useNetwork from '@/app/hooks/account/useNetwork'
 import getAssetSrc from '@/app/utils/getAssetSrc'
-import { getDefaultMarket } from '@/app/utils/getDefaultMarket'
 import { getNavPageFromPath } from '@/app/utils/getNavPageFromPath'
-import getPagePath from '@/app/utils/getPagePath'
+import getTabs from '@/app/utils/getTabs'
 import logEvent from '@/app/utils/logEvent'
 
 import LayoutMoreDropdownListItems from './LayoutMoreDropdownListItems'
@@ -26,9 +23,8 @@ import LayoutPrivacyModal from './LayoutPrivacyModal'
 const SIDE_WIDTH = 420
 
 export default function LayoutDesktopNav(): JSX.Element {
-  const [isDarkMode] = useIsDarkMode()
   const { pathname } = useLocation()
-  const page = getNavPageFromPath(pathname)
+  const rootPage = getNavPageFromPath(pathname)
   const network = useNetwork()
 
   const [isMoreOpen, setIsMoreOpen] = useState(false)
@@ -61,50 +57,19 @@ export default function LayoutDesktopNav(): JSX.Element {
             </BaseLink>
           </Flex>
           <Flex flexGrow={1} alignItems={'center'} justifyContent={'flex-start'}>
-            <Link
-              mx={4}
-              href={getPagePath({ page: PageId.Portfolio })}
-              textVariant="bodyMedium"
-              variant="secondary"
-              color={page !== PageId.Portfolio ? 'secondaryText' : 'text'}
-              onClick={() => logEvent(LogEvent.NavPortfolioTabClick)}
-            >
-              Portfolio
-            </Link>
-            <Link
-              mx={4}
-              href={getPagePath({
-                page: PageId.Trade,
-                network,
-                marketAddressOrName: getDefaultMarket(network),
-              })}
-              onClick={() => logEvent(LogEvent.NavTradeTabClick)}
-              textVariant="bodyMedium"
-              variant="secondary"
-              color={page !== PageId.Trade ? 'secondaryText' : 'text'}
-            >
-              Trade
-            </Link>
-            <Link
-              textVariant="bodyMedium"
-              variant="secondary"
-              mx={4}
-              href={getPagePath({ page: PageId.VaultsIndex })}
-              onClick={() => logEvent(LogEvent.NavVaultsTabClick)}
-              color={page !== PageId.Vaults ? 'secondaryText' : 'text'}
-            >
-              Vaults
-            </Link>
-            <Link
-              textVariant="bodyMedium"
-              variant="secondary"
-              mx={4}
-              href={getPagePath({ page: PageId.RewardsIndex })}
-              onClick={() => logEvent(LogEvent.NavStakeTabClick)}
-              color={page !== PageId.RewardsIndex ? 'secondaryText' : 'text'}
-            >
-              Rewards
-            </Link>
+            {getTabs(network).map(tab => (
+              <Link
+                key={tab.path}
+                mx={4}
+                href={tab.path}
+                textVariant="bodyMedium"
+                variant="secondary"
+                color={rootPage !== tab.rootPageId ? 'secondaryText' : 'text'}
+                onClick={() => logEvent(LogEvent.NavPortfolioTabClick)}
+              >
+                {tab.name}
+              </Link>
+            ))}
             <Link
               textVariant="bodyMedium"
               variant="secondary"

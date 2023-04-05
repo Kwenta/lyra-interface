@@ -11,10 +11,14 @@ export enum PageId {
   VaultsHistory = 'VaultsHistory',
   RewardsIndex = 'RewardsIndex',
   RewardsTrading = 'RewardsTrading',
-  RewardsShorts = 'RewardsShorts',
   RewardsVaults = 'RewardsVaults',
   RewardsEthLyraLp = 'RewardsEthLyraLp',
+  VoteIndex = 'VoteIndex',
+  VoteProposalCreate = 'VoteProposalCreate',
+  VoteProposalDetails = 'VoteProposalDetails',
+  RewardsArrakis = 'RewardsArrakis',
   Storybook = 'Storybook',
+  Faucet = 'Faucet',
 }
 
 export type PageArgsMap = {
@@ -49,15 +53,19 @@ export type PageArgsMap = {
   [PageId.RewardsTrading]: {
     network: string
   }
-  [PageId.RewardsShorts]: {
-    network: string
-  }
   [PageId.RewardsVaults]: {
     network: string
     marketAddressOrName: string
   }
   [PageId.RewardsEthLyraLp]: undefined
+  [PageId.VoteIndex]: undefined
+  [PageId.VoteProposalCreate]: undefined
+  [PageId.VoteProposalDetails]: {
+    proposalId: number
+  }
+  [PageId.RewardsArrakis]: undefined
   [PageId.Storybook]: undefined
+  [PageId.Faucet]: undefined
 }
 
 type PageArgsWithPageMap<M extends Record<string, any>> = {

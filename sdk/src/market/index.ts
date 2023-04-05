@@ -6,7 +6,8 @@ import { parseBytes32String } from '@ethersproject/strings'
 import { PoolHedgerParams } from '../admin'
 import { Board, BoardQuotes } from '../board'
 import { ZERO_BN } from '../constants/bn'
-import { DataSource } from '../constants/contracts'
+import { DataSource, LyraMarketContractId } from '../constants/contracts'
+import { LyraMarketContractMap } from '../constants/mappings'
 import { SnapshotOptions } from '../constants/snapshots'
 import { BoardViewStructOutput, MarketViewWithBoardsStructOutput } from '../constants/views'
 import { OptionMarketViewer as AvalonOptionMarketViewer } from '../contracts/avalon/typechain/AvalonOptionMarketViewer'
@@ -33,6 +34,7 @@ import fetchTradingVolumeHistory from '../utils/fetchTradingVolumeHistory'
 import findMarket from '../utils/findMarket'
 import getBoardView from '../utils/getBoardView'
 import getBoardViewForStrikeId from '../utils/getBoardViewForStrikeId'
+import getLyraMarketContract from '../utils/getLyraMarketContract'
 import getMarketName from '../utils/getMarketName'
 import isMarketEqual from '../utils/isMarketEqual'
 
@@ -56,6 +58,7 @@ export type MarketContractAddresses = {
 }
 
 export type MarketLiquiditySnapshot = {
+  market: Market
   tvl: BigNumber
   freeLiquidity: BigNumber
   burnableLiquidity: BigNumber
@@ -170,6 +173,7 @@ export type MarketParameters = {
   NAV: BigNumber
   tokenPrice: BigNumber
   netStdVega: BigNumber
+  netDelta: BigNumber
   hedgerView: PoolHedgerView | null
   adapterView: ExchangeAdapterView | null
   isMarketPaused: boolean
@@ -327,6 +331,7 @@ export class Market {
       freeLiquidity: marketView.liquidity.freeLiquidity,
       tokenPrice,
       netStdVega: marketView.globalNetGreeks.netStdVega,
+      netDelta: marketView.globalNetGreeks.netDelta,
       isGlobalPaused,
       isMarketPaused: marketView.isPaused,
       owner,
@@ -564,6 +569,17 @@ export class Market {
     }
   }
 
+  contract<C extends LyraMarketContractId, V extends Version>(contractId: C): LyraMarketContractMap<V, C> {
+    return getLyraMarketContract(
+      this.lyra,
+      this.contractAddresses,
+      this.lyra.version,
+      contractId
+    ) as LyraMarketContractMap<V, C>
+  }
+
+  // Transactions
+
   async trade(
     owner: string,
     strikeId: number,
@@ -573,10 +589,29 @@ export class Market {
     slippage: number,
     options?: MarketTradeOptions
   ): Promise<Trade> {
-    return await Trade.get(this.lyra, owner, this.address, strikeId, isCall, isBuy, size, {
-      slippage,
+    return await Trade.get(this.lyra, owner, this.address, strikeId, isCall, isBuy, size, slippage, {
       ...options,
     })
+  }
+
+  approveDeposit(owner: string, amountQuote: BigNumber): PopulatedTransaction {
+    return LiquidityDeposit.approve(this, owner, amountQuote)
+  }
+
+  initiateDeposit(beneficiary: string, amountQuote: BigNumber): PopulatedTransaction {
+    return LiquidityDeposit.initiateDeposit(this, beneficiary, amountQuote)
+  }
+
+  initiateWithdraw(beneficiary: string, amountLiquidityTokens: BigNumber): PopulatedTransaction {
+    return LiquidityWithdrawal.initiateWithdraw(this, beneficiary, amountLiquidityTokens)
+  }
+
+  approveTradeQuote(owner: string, amountQuote: BigNumber): PopulatedTransaction {
+    return Trade.approveQuote(this, owner, amountQuote)
+  }
+
+  approveTradeBase(owner: string, amountBase: BigNumber): PopulatedTransaction {
+    return Trade.approveBase(this, owner, amountBase)
   }
 
   // Dynamic fields
@@ -607,19 +642,5 @@ export class Market {
 
   async owner(): Promise<string> {
     return await fetchMarketOwner(this.lyra, this.contractAddresses)
-  }
-
-  // Transactions
-
-  async approveDeposit(address: string) {
-    return await LiquidityDeposit.approve(this.lyra, this.address, address)
-  }
-
-  async deposit(beneficiary: string, amount: BigNumber): Promise<PopulatedTransaction> {
-    return await LiquidityDeposit.deposit(this.lyra, this.address, beneficiary, amount)
-  }
-
-  async withdraw(beneficiary: string, amount: BigNumber): Promise<PopulatedTransaction> {
-    return await LiquidityWithdrawal.withdraw(this.lyra, this.address, beneficiary, amount)
   }
 }

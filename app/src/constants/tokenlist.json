@@ -1,0 +1,153 @@
+{
+  "name": "Lyra Tokens",
+  "logoURI": "",
+  "keywords": ["lyra"],
+  "timestamp": "2021-03-22T10:01:21.042+00:00",
+  "tokens": [
+    {
+      "name": "USDCoin",
+      "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "symbol": "USDC",
+      "decimals": 6,
+      "chainId": 1,
+      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+      "extensions": {
+        "bridgeInfo": {
+          "10": {
+            "tokenAddress": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607"
+          },
+          "42161": {
+            "tokenAddress": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"
+          }
+        }
+      }
+    },
+    {
+      "name": "Wrapped Ether",
+      "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      "symbol": "WETH",
+      "decimals": 18,
+      "chainId": 1,
+      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
+      "extensions": {
+        "bridgeInfo": {
+          "10": {
+            "tokenAddress": "0x4200000000000000000000000000000000000006"
+          },
+          "42161": {
+            "tokenAddress": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
+          }
+        }
+      }
+    },
+    {
+      "name": "Wrapped BTC",
+      "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      "symbol": "WBTC",
+      "decimals": 8,
+      "chainId": 1,
+      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599/logo.png",
+      "extensions": {
+        "bridgeInfo": {
+          "10": {
+            "tokenAddress": "0x68f180fcCe6836688e9084f035309E29Bf0A2095"
+          },
+          "42161": {
+            "tokenAddress": "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f"
+          }
+        }
+      }
+    },
+    {
+      "chainId": 10,
+      "address": "0xE405de8F52ba7559f9df3C368500B6E6ae6Cee49",
+      "name": "Synthetic Ether",
+      "symbol": "sETH",
+      "decimals": 18,
+      "logoURI": "https://raw.githubusercontent.com/lyra-finance/interface/master/app/public/images/sETH.png"
+    },
+    {
+      "chainId": 10,
+      "address": "0x298B9B95708152ff6968aafd889c6586e9169f1D",
+      "name": "Synthetic Bitcoin",
+      "symbol": "sBTC",
+      "decimals": 18,
+      "logoURI": "https://raw.githubusercontent.com/lyra-finance/interface/master/app/public/images/sBTC.png"
+    },
+    {
+      "chainId": 10,
+      "address": "0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9",
+      "name": "Synthetic USD",
+      "symbol": "sUSD",
+      "decimals": 18,
+      "logoURI": "https://raw.githubusercontent.com/lyra-finance/interface/master/app/public/images/sUSD.png"
+    },
+    {
+      "chainId": 1,
+      "address": "0x01ba67aac7f75f647d94220cc98fb30fcc5105bf",
+      "name": "Lyra",
+      "symbol": "LYRA",
+      "decimals": 18,
+      "logoURI": "https://raw.githubusercontent.com/lyra-finance/interface/master/app/public/images/lyra-token.png",
+      "extensions": {
+        "bridgeInfo": {
+          "10": {
+            "tokenAddress": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb"
+          },
+          "42161": {
+            "tokenAddress": "0x079504b86d38119F859c4194765029F692b7B7aa"
+          }
+        }
+      }
+    },
+    {
+      "chainId": 1,
+      "address": "0xcb9f85730f57732fc899fb158164b9ed60c77d49",
+      "name": "Staked Lyra",
+      "symbol": "stkLYRA",
+      "decimals": 18,
+      "logoURI": "https://raw.githubusercontent.com/lyra-finance/interface/master/app/public/images/staked-lyra-token.png",
+      "extensions": {
+        "bridgeInfo": {
+          "10": {
+            "tokenAddress": "0x0F5d45a7023612e9e244fe84FAc5fCf3740d1492"
+          },
+          "42161": {
+            "tokenAddress": "0x5B237ab26CeD47Fb8ED104671819C801Aa5bA45E"
+          }
+        }
+      }
+    },
+    {
+      "chainId": 10,
+      "address": "0x4200000000000000000000000000000000000042",
+      "name": "Optimism",
+      "symbol": "OP",
+      "decimals": 18,
+      "logoURI": "https://ethereum-optimism.github.io/data/OP/logo.png"
+    },
+    {
+      "chainId": 10,
+      "address": "0x3c8b650257cfb5f272f799f5e2b4e65093a11a05",
+      "name": "Velodrome",
+      "symbol": "VELO",
+      "decimals": 18,
+      "logoURI": "https://ethereum-optimism.github.io/data/VELO/logo.svg"
+    },
+    {
+      "chainId": 1,
+      "name": "Arbitrum",
+      "address": "0xB50721BCf8d664c30412Cfbc6cf7a15145234ad1",
+      "symbol": "ARB",
+      "decimals": 18,
+      "logoURI": "https://arbitrum.foundation/logo.png",
+      "extensions": {
+        "bridgeInfo": {
+          "42161": {
+            "tokenAddress": "0x912CE59144191C1204E64559FE8253a0e49E6548"
+          }
+        }
+      }
+    }
+  ]
+}

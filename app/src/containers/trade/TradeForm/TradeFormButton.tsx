@@ -1,20 +1,18 @@
-import { IconType } from '@lyra/ui/components/Icon'
-import { createToast } from '@lyra/ui/components/Toast'
 import { LayoutProps, MarginProps } from '@lyra/ui/types'
 import { Market, Trade, TradeDisabledReason } from '@lyrafinance/lyra-js'
 import React, { useCallback } from 'react'
 
 import { MAX_BN } from '@/app/constants/bn'
-import { ITERATIONS } from '@/app/constants/contracts'
 import { LogEvent } from '@/app/constants/logEvents'
 import { TransactionType } from '@/app/constants/screen'
 import useAccount from '@/app/hooks/account/useAccount'
 import useTransaction from '@/app/hooks/account/useTransaction'
 import useMutateTrade from '@/app/hooks/mutations/useMutateTrade'
 import useMutateTradeApprove from '@/app/hooks/mutations/useMutateTradeApprove'
+import fromBigNumber from '@/app/utils/fromBigNumber'
 import getLyraSDK from '@/app/utils/getLyraSDK'
 import getTradeLogData from '@/app/utils/getTradeLogData'
-import logError from '@/app/utils/logError'
+import isDev from '@/app/utils/isDev'
 import logEvent from '@/app/utils/logEvent'
 
 import TransactionButton from '../../common/TransactionButton'
@@ -26,6 +24,9 @@ type Props = {
   Omit<LayoutProps, 'size'>
 
 const getTradeDisabledMessage = (disabledReason: TradeDisabledReason): string => {
+  if (isDev()) {
+    return disabledReason
+  }
   switch (disabledReason) {
     case TradeDisabledReason.EmptySize:
       return 'Enter amount'
@@ -35,16 +36,13 @@ const getTradeDisabledMessage = (disabledReason: TradeDisabledReason): string =>
       return 'Not enough collateral'
     case TradeDisabledReason.TooMuchCollateral:
       return 'Too much collateral'
-    case TradeDisabledReason.DeltaOutOfRange:
-      return 'Delta out of range'
     case TradeDisabledReason.InsufficientLiquidity:
-      return 'Insufficient liquidity'
     case TradeDisabledReason.UnableToHedgeDelta:
-      return 'Unable to hedge delta'
+      return 'Insufficient liquidity'
     case TradeDisabledReason.Expired:
-      return 'Strike has expired'
+      return 'Option has expired'
     case TradeDisabledReason.TradingCutoff:
-      return 'Trading paused'
+      return 'Option too close to expiry'
     case TradeDisabledReason.PositionClosed:
       return 'Position closed'
     case TradeDisabledReason.PositionNotLargeEnough:
@@ -53,6 +51,8 @@ const getTradeDisabledMessage = (disabledReason: TradeDisabledReason): string =>
       return 'You are not the owner'
     case TradeDisabledReason.PositionClosedLeftoverCollateral:
       return 'Set collateral to zero'
+    case TradeDisabledReason.PriceVarianceTooHigh:
+    case TradeDisabledReason.DeltaOutOfRange:
     case TradeDisabledReason.VolTooHigh:
     case TradeDisabledReason.VolTooLow:
     case TradeDisabledReason.IVTooHigh:
@@ -60,18 +60,12 @@ const getTradeDisabledMessage = (disabledReason: TradeDisabledReason): string =>
     case TradeDisabledReason.SkewTooHigh:
     case TradeDisabledReason.SkewTooLow:
       return 'Price impact too high'
-    case TradeDisabledReason.EmptyPremium:
-      return 'Option is worthless'
     case TradeDisabledReason.InsufficientBaseAllowance:
     case TradeDisabledReason.InsufficientQuoteAllowance:
       return 'Insufficient Allowance'
     case TradeDisabledReason.InsufficientBaseBalance:
     case TradeDisabledReason.InsufficientQuoteBalance:
       return 'Insufficient Balance'
-    case TradeDisabledReason.PriceVarianceTooHigh:
-      return 'Price variance too high'
-    case TradeDisabledReason.Unknown:
-      return 'Something went wrong'
   }
 }
 
@@ -95,7 +89,6 @@ const getTradeButtonLabel = (trade: Trade): string => {
 
 const TradeFormButton = ({ onTrade, trade, ...styleProps }: Props) => {
   const option = trade.option()
-  const position = trade.position()
   const market = option.market()
 
   const account = useAccount(trade.lyra.network)
@@ -105,23 +98,29 @@ const TradeFormButton = ({ onTrade, trade, ...styleProps }: Props) => {
 
   const execute = useTransaction(trade.lyra.network)
 
+  const transactionType = trade.isCollateralUpdate
+    ? TransactionType.TradeCollateralUpdate
+    : trade.isOpen
+    ? TransactionType.TradeOpenPosition
+    : TransactionType.TradeClosePosition
+
   const handleClickApproveQuote = useCallback(async () => {
     if (!account) {
       console.warn('Missing account')
       return
     }
     logEvent(LogEvent.TradeApproveSubmit, { isBase: false })
-    const tx = await trade.approveQuote(account.address, MAX_BN)
-    await execute(tx, {
+    const tx = trade.approveQuote(MAX_BN)
+    const contract = trade.contract
+    await execute({ tx, contract }, transactionType, {
       onComplete: async () => {
         await mutateTradeApprove()
         logEvent(LogEvent.TradeApproveSuccess, {
           isBase: false,
         })
       },
-      onError: () => logEvent(LogEvent.TradeApproveError, { isBase: false }),
     })
-  }, [account, trade, execute, mutateTradeApprove])
+  }, [account, trade, execute, transactionType, mutateTradeApprove])
 
   const handleClickApproveBase = useCallback(async () => {
     if (!account) {
@@ -129,15 +128,15 @@ const TradeFormButton = ({ onTrade, trade, ...styleProps }: Props) => {
       return null
     }
     logEvent(LogEvent.TradeApproveSubmit, { isBase: true })
-    const tx = await trade.approveBase(account.address, MAX_BN)
-    await execute(tx, {
+    const tx = trade.approveBase(MAX_BN)
+    const contract = trade.contract
+    await execute({ tx, contract }, transactionType, {
       onComplete: async () => {
         await mutateTradeApprove()
         logEvent(LogEvent.TradeApproveSuccess, { isBase: true })
       },
-      onError: () => logEvent(LogEvent.TradeApproveError, { isBase: true }),
     })
-  }, [account, trade, execute, mutateTradeApprove])
+  }, [account, trade, execute, transactionType, mutateTradeApprove])
 
   const handleClickTrade = useCallback(async () => {
     if (!account) {
@@ -145,34 +144,28 @@ const TradeFormButton = ({ onTrade, trade, ...styleProps }: Props) => {
       return
     }
 
-    const proposedTrade = await market.trade(
-      account.address,
-      trade.option().strike().id,
-      trade.option().isCall,
-      trade.isBuy,
-      trade.size,
-      trade.slippage,
-      {
-        setToCollateral: trade.collateral?.amount,
-        isBaseCollateral: trade.collateral?.isBase,
-        positionId: position?.id,
-        iterations: ITERATIONS,
-      }
-    )
-
-    logEvent(LogEvent.TradeSubmit, getTradeLogData(trade))
-
-    if (proposedTrade.disabledReason) {
-      createToast({
-        variant: 'error',
-        description: `Trade Failed: ${getTradeDisabledMessage(proposedTrade.disabledReason)}`,
-        icon: IconType.AlertTriangle,
-      })
-      logError(proposedTrade.disabledReason, { trade: getTradeLogData(trade), account })
-      return
+    const { method, params, contract } = trade
+    const metadata = {
+      blockNumber: trade.market().block.number,
+      isForceClose: trade.isForceClose,
+      strikePrice: fromBigNumber(trade.strikePrice),
+      expiryTimestamp: trade.expiryTimestamp,
+      positionId: trade.positionId ?? -1,
+      iterations: trade.iterations.map(iteration => ({
+        premium: fromBigNumber(iteration.premium),
+        optionPriceFee: fromBigNumber(iteration.optionPriceFee),
+        spotPriceFee: fromBigNumber(iteration.spotPriceFee),
+        vegaUtilFee: fromBigNumber(iteration.vegaUtilFee.vegaUtilFee),
+        varianceFee: fromBigNumber(iteration.varianceFee.varianceFee),
+        forceClosePenalty: fromBigNumber(iteration.forceClosePenalty),
+        volTraded: fromBigNumber(iteration.volTraded),
+        newBaseIv: fromBigNumber(iteration.newBaseIv),
+        newSkew: fromBigNumber(iteration.newSkew),
+        postTradeAmmNetStdVega: fromBigNumber(iteration.postTradeAmmNetStdVega),
+      })),
     }
 
-    const receipt = await execute(proposedTrade.tx, {
+    const receipt = await execute({ contract, method, params, metadata }, transactionType, {
       onComplete: async receipt => {
         const [events] = await Promise.all([getLyraSDK(trade.lyra.network).events(receipt), mutateTrade()])
         const { trades, collateralUpdates } = events
@@ -181,25 +174,33 @@ const TradeFormButton = ({ onTrade, trade, ...styleProps }: Props) => {
           .filter(update => update.isAdjustment)
           .forEach(update => logEvent(LogEvent.TradeCollateralUpdateSuccess, getTradeLogData(update)))
       },
-      onError: error => {
-        // For debugging
-        console.error(error)
-        logEvent(LogEvent.TradeError, { ...getTradeLogData(trade), error: error?.message })
+      onError: ({ description }) => {
+        const maxCost = description?.args?.maxCost
+        const minCost = description?.args?.minCost
+        const totalCost = description?.args?.totalCost
+        if (maxCost && totalCost) {
+          const maxCostNum = fromBigNumber(maxCost)
+          const minCostNum = fromBigNumber(minCost)
+          const totalCostNum = fromBigNumber(totalCost)
+          console.log({
+            blockTimestamp: market.block.timestamp,
+            timeSinceBlock: Date.now() / 1000 - market.block.timestamp,
+            maxCostNum,
+            minCostNum,
+            totalCostNum,
+            diff: trade.isBuy ? (maxCostNum - totalCostNum) / totalCostNum : (minCostNum - totalCostNum) / totalCostNum,
+          })
+        }
       },
     })
+
     if (onTrade && receipt) {
       const [positionId] = Trade.getPositionIdsForLogs(receipt.logs)
       if (positionId) {
         onTrade(market, positionId)
       }
     }
-  }, [trade, account, execute, onTrade, position, market, mutateTrade])
-
-  const transactionType = trade.isCollateralUpdate
-    ? TransactionType.TradeCollateralUpdate
-    : trade.isOpen
-    ? TransactionType.TradeOpenPosition
-    : TransactionType.TradeClosePosition
+  }, [account, execute, transactionType, onTrade, market, trade, mutateTrade])
 
   return (
     <TransactionButton

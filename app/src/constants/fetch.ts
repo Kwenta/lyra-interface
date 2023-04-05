@@ -6,6 +6,7 @@ export enum FetchId {
   // accounts
   AccountENS = 'AccountENS',
   AccountEthBalance = 'AccountEthBalance',
+  AccountIsSmartContractWallet = 'AccountIsSmartContractWallet',
   AccountScreenTransaction = 'AccountScreenTransaction',
   AccountBalances = 'AccountBalances',
   AccountLyraBalances = 'AccountLyraBalances',
@@ -26,30 +27,26 @@ export enum FetchId {
 
   // vaults
   VaultPageData = 'VaultPageData',
-  VaultBalance = 'VaultBalance',
   VaultStats = 'VaultStats',
   VaultAggregateTVL = 'VaultAggregateTVL',
   VaultAggregateStats = 'VaultAggregateStats',
 
+  // faucet
+  FaucetPageData = 'FaucetPageData',
+
   // rewards
   // TODO: @dappbeast simplify account hooks
   RewardsPageData = 'RewardsPageData',
-  RewardsIndexPageData = 'RewardsIndexPageData',
-  RewardsShortsPageData = 'RewardsShortsPageData',
-  RewardsEthLyraLPPageData = 'RewardsEthLyraLPPageData',
-  Markets = 'Markets',
+  RewardsArrakisPageData = 'RewardsArrakisPageData',
   AccountRewardEpochs = 'AccountRewardEpochs',
   LatestRewardEpoch = 'LatestRewardEpoch',
-  LyraStaking = 'LyraStaking',
-  LyraStakingAccount = 'LyraStakingAccount',
-  WethLyraStaking = 'WethLyraStaking',
-  WethLyraStakingL2Account = 'WethLyraStakingL2Account',
-  WethLyraStakingAccount = 'WethLyraStakingAccount',
-  ClaimableBalanceL2 = 'ClaimableBalanceL2',
+  ArrakisOptimismAccount = 'ArrakisOptimismAccount',
+  ArrakisStaking = 'ArrakisStaking',
+  CamelotStaking = 'CamelotStaking',
   ClaimableStakingRewards = 'ClaimableStakingRewards',
-  ClaimableWethLyraRewards = 'ClaimableWethLyraRewards',
   TokenSupply = 'TokenSupply',
   NetworkTradingVolume = 'NetworkTradingVolume',
+  VelodromeStaking = 'VelodromeStaking',
 
   // shared
   PositionHistory = 'PositionHistory',
@@ -60,4 +57,13 @@ export enum FetchId {
   AdminMultiSigTransaction = 'AdminMultiSigTransaction',
   AdminMultiSigTransactionCount = 'AdminMultiSigTransactionCount',
   AdminMultiSigTransactionIds = 'AdminMultiSigTransactionIds',
+
+  // governance
+  VoteIndexPageData = 'VoteIndexPageData',
+  VoteDetailsPageData = 'VoteDetailsPageData',
+  ProposalCreatedEventData = 'ProposalCreatedEventData',
+  ProposalCreatedEventsData = 'ProposalCreatedEventsData',
+  ShortExecutorData = 'ShortExecutorData',
+  LyraGovernanceData = 'LyraGovernanceData',
+  CreateProposal = 'CreateProposal',
 }

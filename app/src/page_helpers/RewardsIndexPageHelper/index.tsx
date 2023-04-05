@@ -1,52 +1,51 @@
-import Box from '@lyra/ui/components/Box'
-import Grid from '@lyra/ui/components/Grid'
-import Text from '@lyra/ui/components/Text'
 import useIsMobile from '@lyra/ui/hooks/useIsMobile'
-import { WethLyraStaking } from '@lyrafinance/lyra-js'
+import { AccountLyraBalances, LyraStakingAccount } from '@lyrafinance/lyra-js'
+import { LyraStaking } from '@lyrafinance/lyra-js'
 import React from 'react'
 
-import RewardsLastUpdatedAlert from '@/app/containers/common/RewardsLastUpdatedAlert'
-import RewardsTokenSupplyCard from '@/app/containers/rewards/RewardsTokenSupplyCard'
-import ShortRewardsSection from '@/app/containers/rewards/ShortRewardsSection'
-import StakingRewardsCard from '@/app/containers/rewards/StakingRewardsCard'
-import TradingRewardsSection from '@/app/containers/rewards/TradingRewardsSection'
-import VaultsRewardsSection from '@/app/containers/rewards/VaultsRewardsSection'
-import WethLyraLPRewardsSection from '@/app/containers/rewards/WethLyraLPRewardsSection'
-import { LatestRewardEpoch } from '@/app/hooks/rewards/useLatestRewardEpoch'
+import { Vault } from '@/app/constants/vault'
+import RewardPageHeader from '@/app/containers/rewards/RewardsPageHeader'
+import RewardsLastUpdatedAlert from '@/app/containers/rewards_index/RewardsLastUpdatedAlert'
+import RewardsStakingCard from '@/app/containers/rewards_index/RewardsStakingCard'
+import RewardsTradingSection from '@/app/containers/rewards_index/RewardsTradingSection'
+import RewardsVaultsSection from '@/app/containers/rewards_index/RewardsVaultsSection'
+import RewardsWethLyraLPSection from '@/app/containers/rewards_index/RewardsWethLyraLPSection'
+import { LatestRewardEpoch } from '@/app/hooks/rewards/useRewardsPageData'
 
 import Page from '../common/Page'
 import PageGrid from '../common/Page/PageGrid'
 
 type Props = {
   latestRewardEpochs: LatestRewardEpoch[]
-  wethLyraStaking: WethLyraStaking | null
+  vaults: Vault[]
+  lyraBalances: AccountLyraBalances
+  lyraStaking: LyraStaking
+  lyraStakingAccount: LyraStakingAccount | null
 }
 
-const RewardsIndexPageHelper = ({ latestRewardEpochs, wethLyraStaking }: Props) => {
+const RewardsIndexPageHelper = ({
+  latestRewardEpochs,
+  vaults,
+  lyraBalances,
+  lyraStaking,
+  lyraStakingAccount,
+}: Props) => {
   const isMobile = useIsMobile()
-  const pageHeader = (
-    <Grid mb={4} p={[6, 0]} sx={{ gridTemplateColumns: ['1fr', '1fr auto'], alignItems: 'center' }}>
-      <Box>
-        <Text variant="xlTitle" mb={2}>
-          Rewards
-        </Text>
-        <Text variant="heading" color="secondaryText" sx={{ fontWeight: 300 }}>
-          Stake and Earn
-        </Text>
-      </Box>
-      <RewardsTokenSupplyCard mt={[56, 0]} />
-    </Grid>
-  )
+
   return (
-    <Page noHeaderPadding header={!isMobile ? pageHeader : null}>
+    <Page noHeaderPadding header={!isMobile ? <RewardPageHeader showBackButton={false} /> : null}>
       <PageGrid>
-        {isMobile ? pageHeader : null}
+        {isMobile ? <RewardPageHeader showBackButton={false} /> : null}
         <RewardsLastUpdatedAlert latestRewardEpochs={latestRewardEpochs} />
-        <StakingRewardsCard latestRewardEpochs={latestRewardEpochs} />
-        <VaultsRewardsSection latestRewardEpochs={latestRewardEpochs} />
-        <TradingRewardsSection latestRewardEpochs={latestRewardEpochs} />
-        <ShortRewardsSection latestRewardEpochs={latestRewardEpochs} />
-        <WethLyraLPRewardsSection wethLyraStaking={wethLyraStaking} />
+        <RewardsStakingCard
+          latestRewardEpochs={latestRewardEpochs}
+          lyraBalances={lyraBalances}
+          lyraStaking={lyraStaking}
+          lyraStakingAccount={lyraStakingAccount}
+        />
+        <RewardsVaultsSection vaults={vaults} />
+        <RewardsTradingSection latestRewardEpochs={latestRewardEpochs} />
+        <RewardsWethLyraLPSection />
       </PageGrid>
     </Page>
   )

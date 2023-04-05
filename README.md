@@ -16,8 +16,28 @@ Once changes in the `dev` branch have been thoroughly tested and approved, new r
 
 ### Setup
 
+Install app dependencies:
+
 ```
 yarn install
+```
+
+Create local environment variables:
+
+```
+cp app/.env app/.env.local
+```
+
+Setup an RPC for the supported networks and testnets:
+
+```
+# .env.local
+REACT_APP_OPTIMISM_MAINNET_RPC_URL=
+REACT_APP_OPTIMISM_GOERLI_RPC_URL=
+REACT_APP_ARBITRUM_MAINNET_RPC_URL=
+REACT_APP_ARBITRUM_GOERLI_RPC_URL=
+REACT_APP_ETHEREUM_MAINNET_RPC_URL=
+REACT_APP_ETHEREUM_GOERLI_RPC_URL=
 ```
 
 ### Run the interface locally

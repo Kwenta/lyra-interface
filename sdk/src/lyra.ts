@@ -1,4 +1,4 @@
-import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core'
 import { BigNumber } from '@ethersproject/bignumber'
 import { PopulatedTransaction } from '@ethersproject/contracts'
 import { JsonRpcProvider, TransactionReceipt } from '@ethersproject/providers'
@@ -11,6 +11,7 @@ import { Board, BoardQuotes } from './board'
 import { CollateralUpdateEvent } from './collateral_update_event'
 import { Chain } from './constants/chain'
 import { Deployment } from './constants/contracts'
+import { LYRA_API_URL } from './constants/links'
 import { Network } from './constants/network'
 import { GlobalRewardEpoch } from './global_reward_epoch'
 import { LiquidityDeposit } from './liquidity_deposit'
@@ -35,13 +36,13 @@ import getLyraDeploymentProvider from './utils/getLyraDeploymentProvider'
 import getLyraDeploymentSubgraphURI from './utils/getLyraDeploymentSubgraphURI'
 import getNetworkForChain from './utils/getLyraNetworkForChain'
 import getVersionForChain from './utils/getVersionForChain'
-import { AccountWethLyraStaking, WethLyraStaking } from './weth_lyra_staking'
 
 export type LyraConfig = {
   provider: JsonRpcProvider
   optimismProvider?: JsonRpcProvider
   ethereumProvider?: JsonRpcProvider
   subgraphUri?: string
+  apiUri?: string
 }
 
 export enum Version {
@@ -59,6 +60,7 @@ export default class Lyra {
   ethereumProvider?: JsonRpcProvider
   subgraphUri: string
   subgraphClient: ApolloClient<NormalizedCacheObject>
+  apiUri: string
   deployment: Deployment
   network: Network
   version: Version
@@ -71,6 +73,7 @@ export default class Lyra {
       this.ethereumProvider = config.ethereumProvider
       this.chain = getLyraChainForChainId(this.provider.network.chainId)
       this.subgraphUri = configObj?.subgraphUri ?? getLyraDeploymentSubgraphURI(this.chain)
+      this.apiUri = configObj.apiUri ?? LYRA_API_URL
     } else if (typeof config === 'number') {
       // Chain ID
       this.chain = getLyraChainForChainId(config)
@@ -87,6 +90,7 @@ export default class Lyra {
       link: new HttpLink({ uri: this.subgraphUri, fetch }),
       cache: new InMemoryCache(),
     })
+    this.apiUri = LYRA_API_URL
     this.chainId = getLyraChainIdForChain(this.chain)
     this.deployment = getLyraDeploymentForChain(this.chain)
     this.network = getNetworkForChain(this.chain)
@@ -144,6 +148,24 @@ export default class Lyra {
   }
 
   // Trade
+
+  async approveTradeQuote(
+    marketAddressOrName: string,
+    owner: string,
+    amountQuote: BigNumber
+  ): Promise<PopulatedTransaction> {
+    const market = await this.market(marketAddressOrName)
+    return market.approveTradeQuote(owner, amountQuote)
+  }
+
+  async approveTradeBase(
+    marketAddressOrName: string,
+    owner: string,
+    amountBase: BigNumber
+  ): Promise<PopulatedTransaction> {
+    const market = await this.market(marketAddressOrName)
+    return market.approveTradeBase(owner, amountBase)
+  }
 
   async trade(
     owner: string,
@@ -230,41 +252,48 @@ export default class Lyra {
     return Account.get(this, address)
   }
 
-  async drip(owner: string): Promise<PopulatedTransaction> {
+  drip(owner: string): PopulatedTransaction {
     const account = Account.get(this, owner)
-    return await account.drip()
+    return account.drip()
   }
 
   // Liquidity Deposits
 
-  async liquidityDeposits(marketAddressOrName: string, owner: string): Promise<LiquidityDeposit[]> {
+  async deposits(marketAddressOrName: string, owner: string): Promise<LiquidityDeposit[]> {
     return await LiquidityDeposit.getByOwner(this, marketAddressOrName, owner)
   }
 
-  async approveDeposit(marketAddressOrName: string, address: string): Promise<PopulatedTransaction | null> {
-    return await LiquidityDeposit.approve(this, marketAddressOrName, address)
-  }
-
-  async deposit(
-    beneficiary: string,
+  async approveDeposit(
     marketAddressOrName: string,
+    address: string,
     amountQuote: BigNumber
   ): Promise<PopulatedTransaction | null> {
-    return await LiquidityDeposit.deposit(this, marketAddressOrName, beneficiary, amountQuote)
+    const market = await this.market(marketAddressOrName)
+    return market.approveDeposit(address, amountQuote)
+  }
+
+  async initiateDeposit(
+    marketAddressOrName: string,
+    beneficiary: string,
+    amountQuote: BigNumber
+  ): Promise<PopulatedTransaction | null> {
+    const market = await this.market(marketAddressOrName)
+    return market.initiateDeposit(beneficiary, amountQuote)
   }
 
   // Liquidity Withdrawals
 
-  async liquidityWithdrawals(marketAddressOrName: string, owner: string): Promise<LiquidityWithdrawal[]> {
+  async withdrawals(marketAddressOrName: string, owner: string): Promise<LiquidityWithdrawal[]> {
     return await LiquidityWithdrawal.getByOwner(this, marketAddressOrName, owner)
   }
 
-  async withdraw(
-    beneficiary: string,
+  async initiateWithdraw(
     marketAddressOrName: string,
+    beneficiary: string,
     amountLiquidityTokens: BigNumber
   ): Promise<PopulatedTransaction | null> {
-    return await LiquidityWithdrawal.withdraw(this, marketAddressOrName, beneficiary, amountLiquidityTokens)
+    const market = await this.market(marketAddressOrName)
+    return market.initiateWithdraw(beneficiary, amountLiquidityTokens)
   }
 
   // Admin
@@ -279,10 +308,6 @@ export default class Lyra {
     return await AccountRewardEpoch.claim(this, address, tokenAddresses)
   }
 
-  async claimableRewards(address: string) {
-    return await AccountRewardEpoch.getClaimableBalances(this, address)
-  }
-
   async lyraStaking(): Promise<LyraStaking> {
     return await LyraStaking.get(this)
   }
@@ -291,28 +316,8 @@ export default class Lyra {
     return await LyraStaking.getByOwner(this, address)
   }
 
-  async approveStaking(address: string) {
-    return await LyraStaking.approve(this, address)
-  }
-
-  async stake(address: string, amount: BigNumber) {
-    return await LyraStaking.stake(this, address, amount)
-  }
-
-  async unstake(address: string, amount: BigNumber) {
-    return await LyraStaking.unstake(this, address, amount)
-  }
-
   async claimableStakingRewards(address: string) {
     return LyraStaking.claimableRewards(this, address)
-  }
-
-  async claimStakingRewards(address: string) {
-    return await LyraStaking.claim(this, address)
-  }
-
-  async requestUnstake(address: string): Promise<PopulatedTransaction> {
-    return await LyraStaking.requestUnstake(this, address)
   }
 
   async globalRewardEpochs(): Promise<GlobalRewardEpoch[]> {
@@ -325,33 +330,5 @@ export default class Lyra {
 
   async accountRewardEpochs(address: string): Promise<AccountRewardEpoch[]> {
     return await AccountRewardEpoch.getByOwner(this, address)
-  }
-
-  async wethLyraStaking(): Promise<WethLyraStaking> {
-    return await WethLyraStaking.get(this)
-  }
-
-  async wethLyraStakingAccount(address: string): Promise<AccountWethLyraStaking> {
-    return await WethLyraStaking.getByOwner(this, address)
-  }
-
-  async approveWethLyraStaking(address: string) {
-    return await WethLyraStaking.approve(this, address)
-  }
-
-  async claimableWethLyraRewards(address: string) {
-    return WethLyraStaking.claimableRewards(this, address)
-  }
-
-  async claimWethLyraRewards(address: string) {
-    return await WethLyraStaking.claim(this, address)
-  }
-
-  async stakeWethLyra(address: string, amount: BigNumber) {
-    return await WethLyraStaking.stake(this, address, amount)
-  }
-
-  async unstakeWethLyra(address: string, amount: BigNumber) {
-    return await WethLyraStaking.unstake(this, address, amount)
   }
 }

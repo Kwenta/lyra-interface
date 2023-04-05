@@ -22,15 +22,15 @@ const getPositionPath = (args: PageArgsMap[PageId.Position]): string => {
 }
 
 const getRewardsTradingPath = (args: PageArgsMap[PageId.RewardsTrading]): string => {
-  return `/rewards/trading/${args.network}`
+  return `/rewards/trading/${args.network}`.toLowerCase()
 }
 
 const getRewardsVaultsPath = (args: PageArgsMap[PageId.RewardsVaults]): string => {
-  return `/rewards/vaults/${args.network}/${args.marketAddressOrName}`
+  return `/rewards/vaults/${args.network}/${args.marketAddressOrName}`.toLowerCase()
 }
 
-const getRewardsShortsPath = (args: PageArgsMap[PageId.RewardsShorts]): string => {
-  return `/rewards/shorts/${args.network}`
+const getVoteProposalDetailsPath = (args: PageArgsMap[PageId.VoteProposalDetails]): string => {
+  return `/vote/proposal/${args.proposalId}`
 }
 
 // TODO: @dappbeast Fix page path typescript in switch statement
@@ -51,6 +51,8 @@ export const getRelativePagePath = <T extends keyof PageArgsMap>(args: PagePathA
       return '/portfolio/history'
     case PageId.Storybook:
       return '/storybook'
+    case PageId.Faucet:
+      return '/faucet'
     case PageId.VaultsIndex:
       return '/vaults'
     case PageId.VaultsHistory:
@@ -63,17 +65,23 @@ export const getRelativePagePath = <T extends keyof PageArgsMap>(args: PagePathA
       return getRewardsTradingPath(args as PageArgsMap[PageId.RewardsTrading])
     case PageId.RewardsVaults:
       return getRewardsVaultsPath(args as PageArgsMap[PageId.RewardsVaults])
-    case PageId.RewardsShorts:
-      return getRewardsShortsPath(args as PageArgsMap[PageId.RewardsShorts])
     case PageId.RewardsEthLyraLp:
       return '/rewards/eth-lyra'
+    case PageId.VoteIndex:
+      return '/vote'
+    case PageId.VoteProposalCreate:
+      return '/vote/proposal/create'
+    case PageId.VoteProposalDetails:
+      return getVoteProposalDetailsPath(args as PageArgsMap[PageId.VoteProposalDetails])
+    case PageId.RewardsArrakis:
+      return '/rewards/arrakis'
     case PageId.NotFound:
       return '/404'
   }
 }
 
 const getPagePath = <T extends keyof PageArgsMap>(args: PagePathArgs<T>, includeHost = false): string => {
-  const path = getRelativePagePath(args)
+  const path = getRelativePagePath(args).toLowerCase()
   return includeHost ? `${getHostname()}${path}` : path
 }
 

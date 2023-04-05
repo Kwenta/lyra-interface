@@ -1,34 +1,50 @@
-import Lyra from '@lyrafinance/lyra-js'
+import Lyra, { Chain } from '@lyrafinance/lyra-js'
 
-import { NETWORK_CONFIGS } from '../constants/networks'
+import { LyraNetwork } from '../constants/networks'
 import CachedStaticJsonRpcProvider from './CachedStaticJsonRpcProvider'
-import getArbitrumChainId from './getArbitrumChainId'
-import getChainForChainId from './getChainForChainId'
-import getOptimismChainId from './getOptimismChainId'
+import getNetworkConfig from './getNetworkConfig'
+import isMainnet from './isMainnet'
 import mainnetProvider from './mainnetProvider'
 
-const optimismChainId = getOptimismChainId()
-const optimismNetworkConfig = NETWORK_CONFIGS[getChainForChainId(optimismChainId)]
-const optimismProvider = new CachedStaticJsonRpcProvider(
-  optimismNetworkConfig.readRpcUrls,
-  optimismNetworkConfig.chainId
-)
+const optimismNetworkConfig = getNetworkConfig(LyraNetwork.Optimism)
+const optimismProvider = new CachedStaticJsonRpcProvider(optimismNetworkConfig.rpcUrl, optimismNetworkConfig.chainId)
 
-const arbitrumChainId = getArbitrumChainId()
-const arbitrumNetworkConfig = NETWORK_CONFIGS[getChainForChainId(arbitrumChainId)]
-const arbitrumProvider = new CachedStaticJsonRpcProvider(
-  arbitrumNetworkConfig.readRpcUrls,
+const arbitrumNetworkConfig = getNetworkConfig(LyraNetwork.Arbitrum)
+export const arbitrumProvider = new CachedStaticJsonRpcProvider(
+  arbitrumNetworkConfig.rpcUrl,
   arbitrumNetworkConfig.chainId
 )
 
+const getLyraSubgraphURI = (chain: Chain): string | undefined => {
+  const SATSUMA_API_KEY = process.env.REACT_APP_SATSUMA_API_KEY
+  if (!SATSUMA_API_KEY) {
+    // Use SDK default
+    return
+  }
+  switch (chain) {
+    case Chain.Optimism:
+      return `https://subgraph.satsuma-prod.com/${SATSUMA_API_KEY}/lyra/optimism-mainnet/api`
+    case Chain.OptimismGoerli:
+      return `https://subgraph.satsuma-prod.com/${SATSUMA_API_KEY}/lyra/optimism-goerli/api`
+    case Chain.Arbitrum:
+      return `https://subgraph.satsuma-prod.com/${SATSUMA_API_KEY}/lyra/arbitrum-mainnet/api`
+    case Chain.ArbitrumGoerli:
+      return `https://subgraph.satsuma-prod.com/${SATSUMA_API_KEY}/lyra/arbitrum-goerli/api`
+  }
+}
+
 export const lyraOptimism = new Lyra({
   provider: optimismProvider,
+  apiUri: process.env.REACT_APP_API_URL,
+  subgraphUri: getLyraSubgraphURI(isMainnet() ? Chain.Optimism : Chain.OptimismGoerli),
   optimismProvider: optimismProvider,
   ethereumProvider: mainnetProvider,
 })
 
 export const lyraArbitrum = new Lyra({
   provider: arbitrumProvider,
+  apiUri: process.env.REACT_APP_API_URL,
+  subgraphUri: getLyraSubgraphURI(isMainnet() ? Chain.Arbitrum : Chain.ArbitrumGoerli),
   optimismProvider: optimismProvider,
   ethereumProvider: mainnetProvider,
 })

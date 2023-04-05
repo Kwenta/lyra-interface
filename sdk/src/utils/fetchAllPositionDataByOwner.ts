@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client/core'
 import { getAddress } from '@ethersproject/address'
 
 import { POSITION_QUERY_FRAGMENT, PositionQueryResult } from '../constants/queries'
@@ -11,6 +11,7 @@ import getSettleDataFromSubgraph from './getSettleDataFromSubgraph'
 import getTradeDataFromSubgraph from './getTradeDataFromSubgraph'
 import getTransferDataFromSubgraph from './getTransferDataFromSubgraph'
 import getUniqueBy from './getUniqueBy'
+import subgraphRequest from './subgraphRequest'
 
 // TODO: @dappbeast Handle more than 1k position queries
 const positionsQuery = gql`
@@ -40,21 +41,21 @@ export default async function fetchAllPositionDataByOwner(
   owner: string,
   markets: Market[]
 ): Promise<PositionData[]> {
-  const { data } = await lyra.subgraphClient.query<
+  const { data } = await subgraphRequest<
     {
       optionTransfers: { position: PositionQueryResult }[]
       trades: { position: PositionQueryResult }[]
     },
     PositionVariables
-  >({
+  >(lyra.subgraphClient, {
     query: positionsQuery,
     variables: {
       owner: owner.toLowerCase(),
     },
   })
 
-  const transferPositions = data.optionTransfers.map(t => t.position)
-  const tradedPositions = data.trades.map(t => t.position)
+  const transferPositions = data?.optionTransfers.map(t => t.position) ?? []
+  const tradedPositions = data?.trades.map(t => t.position) ?? []
   const positions = getUniqueBy(tradedPositions.concat(transferPositions), p => p.id)
 
   const marketsByAddress: Record<string, Market> = markets.reduce(

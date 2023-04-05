@@ -3,9 +3,10 @@ import useThemeValue from '@lyra/ui/hooks/useThemeValue'
 import { MarginProps, ResponsiveValue } from '@lyra/ui/types'
 import { LayoutProps } from '@lyra/ui/types'
 import React from 'react'
+import { useMemo } from 'react'
 
-import useOptimismTokenLogoURI from '@/app/hooks/data/useOptimismTokenLogoURI'
 import getAssetSrc from '@/app/utils/getAssetSrc'
+import getTokenInfo from '@/app/utils/getTokenInfo'
 
 type Props = {
   nameOrAddress: string
@@ -14,9 +15,14 @@ type Props = {
 } & LayoutProps &
   MarginProps
 
-export default function TokenImage({ nameOrAddress, size = 32, uri = '', ...styleProps }: Props) {
+export default function TokenImage({ nameOrAddress, size = 32, ...styleProps }: Props) {
   const trueSize = parseInt(String(useThemeValue(size)))
-  const logoURI = useOptimismTokenLogoURI(nameOrAddress) ?? uri
+  const logoURI = useMemo(() => {
+    if (nameOrAddress.toLowerCase() === 'eth') {
+      return '/images/ethereum-logo.png'
+    }
+    return getTokenInfo(nameOrAddress)?.logoURI ?? ''
+  }, [nameOrAddress])
   return (
     <Image
       sx={{

@@ -4,7 +4,9 @@ export enum LogEvent {
   NavPortfolioAnnouncementCTAClick = 'NavPortfolioAnnouncementCTAClick',
   NavVaultsTabClick = 'NavVaultsTabClick',
   NavTradeTabClick = 'NavTradeTabClick',
-  NavStakeTabClick = 'NavStakeTabClick',
+  NavRewardsTabClick = 'NavRewardsTabClick',
+  NavFaucetTabClick = 'NavFaucetTabClick',
+  NavVoteTabClick = 'NavVoteTabClick',
   NavDocsClick = 'NavDocsClick',
   NavGithubClick = 'NavGithubClick',
   NavDiscordClick = 'NavDiscordClick',
@@ -55,14 +57,10 @@ export enum LogEvent {
   // Vault
   VaultDepositApproveSubmit = 'VaultDepositApproveSubmit',
   VaultDepositApproveSuccess = 'VaultDepositApproveSuccess',
-  VaultDepositApproveError = 'VaultDepositApproveError',
   VaultDepositSuccess = 'VaultDepositSuccess',
-  VaultDepositError = 'VaultDepositError',
   VaultWithdrawApproveSubmit = 'VaultWithdrawApproveSubmit',
   VaultWithdrawApproveSuccess = 'VaultWithdrawApproveSuccess',
-  VaultWithdrawApproveError = 'VaultWithdrawApproveError',
   VaultWithdrawSuccess = 'VaultWithdrawSuccess',
-  VaultWithdrawError = 'VaultWithdrawError',
   VaultChartTypeSelect = 'VaultChartTypeSelect',
   VaultChartPeriodSelect = 'VaultChartPeriodSelect',
   VaultRewardsLearnMoreClick = 'VaultRewardsLearnMoreClick',
@@ -72,26 +70,24 @@ export enum LogEvent {
   // Migrate Staked Lyra
   MigrateStakeLyraApproveSubmit = 'MigrateStakeLyraApproveSubmit',
   MigrateStakeLyraApproveSuccess = 'MigrateStakeLyraApproveSuccess',
-  MigrateStakeLyraApproveError = 'MigrateStakeLyraApproveError',
   MigrateStakeLyraModalOpen = 'MigrateStakeLyraModalOpen',
   MigrateStakeLyraModalClose = 'MigrateStakeLyraModalClose',
   MigrateStakeLyraSubmit = 'MigrateStakeLyraSubmit',
   MigrateStakeLyraSuccess = 'MigrateStakeLyraSuccess',
-  MigrateStakeLyraError = 'MigrateStakeLyraError',
 
   // Staking
   StakeLyraApproveSubmit = 'StakeLyraApproveSubmit',
   StakeLyraApproveSuccess = 'StakeLyraApproveSuccess',
-  StakeLyraApproveError = 'StakeLyraApproveError',
   StakeLyraModalOpen = 'StakeLyraModalOpen',
   StakeLyraModalClose = 'StakeLyraModalClose',
   StakeLyraSubmit = 'StakeLyraSubmit',
   StakeLyraSuccess = 'StakeLyraSuccess',
-  StakeLyraError = 'StakeLyraError',
   UnstakeLyraSubmit = 'UnstakeLyraSubmit',
   UnstakeLyraSuccess = 'UnstakeLyraSuccess',
-  UnstakeLyraError = 'UnstakeLyraError',
   StakeLyraOneInchClick = 'StakeLyraOneInchClick',
+
+  // Vote
+  VoteGovernanceClick = 'VoteGovernanceClick',
 
   // Onboarding
   OnboardingModalOpen = 'OnboardingModalOpen',

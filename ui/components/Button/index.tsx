@@ -43,7 +43,6 @@ export type BaseButtonProps = {
   isLoading?: boolean
   textColor?: TextColor
   justify?: ButtonJustify
-  noPadding?: boolean
 }
 
 export type ButtonProps = BaseButtonProps & PaddingProps & Omit<MarginProps & LayoutProps, 'size'>
@@ -88,28 +87,44 @@ export const getButtonSizeSx = (size: ButtonSize): Record<string, string | numbe
   }
 }
 
-const EMPTY_PADDING = { px: 0, py: 0 }
-
-export const getButtonPaddingSx = (size: ButtonSize): Record<string, string | number> => {
+const getButtonPy = (size: ButtonSize): number => {
   switch (size) {
     case 'small':
     case 'sm':
-      return {
-        px: 1,
-        py: 0,
-      }
+      return 0
     case 'medium':
     case 'md':
-      return {
-        px: 2,
-        py: 1,
-      }
+      return 1
     case 'large':
     case 'lg':
-      return {
-        px: 3,
-        py: 2,
-      }
+      return 2
+  }
+}
+
+const getButtonPx = (size: ButtonSize): number => {
+  switch (size) {
+    case 'small':
+    case 'sm':
+      return 1
+    case 'medium':
+    case 'md':
+      return 2
+    case 'large':
+    case 'lg':
+      return 3
+  }
+}
+
+const getSectionPx = (size: ButtonSize): number => {
+  switch (size) {
+    case 'small':
+    case 'sm':
+      return 1
+    case 'medium':
+    case 'md':
+    case 'large':
+    case 'lg':
+      return 2
   }
 }
 
@@ -204,14 +219,12 @@ const Button = React.forwardRef(
       textVariant,
       textColor,
       showRightIconSeparator = false,
-      noPadding,
       ...styleProps
     }: ButtonProps,
     ref
   ): ButtonElement => {
     const buttonVariant = getButtonVariant(variant, isOutline, isTransparent, isDisabled)
     const sizeSx = getButtonSizeSx(size)
-    const paddingSx = !noPadding ? getButtonPaddingSx(size) : EMPTY_PADDING
     const buttonSx = getVariantSX(buttonVariant)
 
     const [overrideIsLoading, setOverrideIsLoading] = useState(false)
@@ -239,17 +252,15 @@ const Button = React.forwardRef(
       [isDisabled, isLoading, onClick]
     )
 
+    const py = getButtonPy(size)
+    const px = getButtonPx(size)
+    const sectionPx = getSectionPx(size)
+
     // HACK: Ensure fontSize in theme always refers to direct value
     const iconSize = getButtonIconSize(size)
     const left =
       leftIcon || isLoading ? (
-        <Flex
-          justifyContent={'flex-start'}
-          alignItems="center"
-          flexGrow={leftIconSpacing}
-          py={paddingSx.py}
-          pl={paddingSx.px}
-        >
+        <Flex justifyContent={'flex-start'} alignItems="center" flexGrow={leftIconSpacing} py={py} pl={px}>
           {leftIcon ? (
             typeof leftIcon === 'string' ? (
               <IconOrImage src={leftIcon} size={iconSize} />
@@ -263,17 +274,17 @@ const Button = React.forwardRef(
       ) : null
 
     const right = rightIcon ? (
-      <Flex flexGrow={rightIconSpacing} justifyContent={'flex-end'} alignItems="center" pr={paddingSx.px}>
+      <Flex flexGrow={rightIconSpacing} justifyContent={'flex-end'} alignItems="center" pr={px}>
         {showRightIconSeparator ? (
           <Box
-            mr={paddingSx.px}
+            mr={sectionPx} // TODO
             ml="auto"
             height="100%"
             minWidth="1px"
             bg={isOutline ? buttonSx.borderColor : 'background'}
           />
         ) : null}
-        <Flex py={paddingSx.py} justifyContent={'flex-end'} alignItems="center">
+        <Flex py={py} justifyContent={'flex-end'} alignItems="center">
           {typeof rightIcon === 'string' ? (
             <IconOrImage src={rightIcon} size={iconSize} color="primaryText" />
           ) : (
@@ -286,9 +297,9 @@ const Button = React.forwardRef(
     return (
       <RebassButton
         ref={ref}
-        as={href != null ? BaseLink : 'button'}
-        href={href}
-        target={target}
+        as={!isDisabled && href ? BaseLink : 'button'}
+        href={!isDisabled ? href : undefined}
+        target={!isDisabled ? target : undefined}
         display="flex"
         type={type}
         justifyContent={getButtonJustify(justify)}
@@ -305,7 +316,11 @@ const Button = React.forwardRef(
         opacity={isLoading ? 0.8 : 1.0}
       >
         {left}
-        <Flex sx={paddingSx} alignItems="center" mx={showRightIconSeparator ? 'auto' : 'none'}>
+        <Flex
+          sx={{ pl: left ? sectionPx : px, pr: right ? sectionPx : px, py }}
+          alignItems="center"
+          mx={showRightIconSeparator ? 'auto' : 'none'}
+        >
           {React.isValidElement(label) ? (
             label
           ) : (

@@ -2,6 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { MarginProps } from '@lyra/ui/types'
 import React, { useCallback } from 'react'
 
+import { MAX_BN } from '@/app/constants/bn'
 import { LogEvent } from '@/app/constants/logEvents'
 import { TransactionType } from '@/app/constants/screen'
 import { Vault } from '@/app/constants/vault'
@@ -31,13 +32,12 @@ const VaultsDepositFormButton = ({ vault, amount, onDeposit, ...styleProps }: Pr
       console.warn('Account does not exist')
       return
     }
-    const tx = await market.approveDeposit(account)
-    await execute(tx, {
+    const tx = market.approveDeposit(account, MAX_BN)
+    await execute(tx, TransactionType.VaultDeposit, {
       onComplete: async () => {
         logEvent(LogEvent.VaultDepositApproveSuccess)
         await mutateDeposit()
       },
-      onError: error => logEvent(LogEvent.VaultDepositApproveError, { error: error?.message }),
     })
   }, [account, market, execute, mutateDeposit])
 
@@ -46,13 +46,12 @@ const VaultsDepositFormButton = ({ vault, amount, onDeposit, ...styleProps }: Pr
       console.warn('Account does not exist')
       return
     }
-    await execute(market.deposit(account, amount), {
+    await execute(market.initiateDeposit(account, amount), TransactionType.VaultDeposit, {
       onComplete: async () => {
         logEvent(LogEvent.VaultDepositSuccess)
         await mutateDeposit()
         onDeposit()
       },
-      onError: error => logEvent(LogEvent.VaultDepositError, { amount: amount, error: error?.message }),
     })
   }, [account, market, execute, amount, onDeposit, mutateDeposit])
 

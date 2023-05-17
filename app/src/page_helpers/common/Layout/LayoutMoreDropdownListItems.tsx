@@ -1,13 +1,10 @@
 import DropdownButtonListItem from '@lyra/ui/components/Button/DropdownButtonListItem'
 import { IconType } from '@lyra/ui/components/Icon'
-import useIsDarkMode from '@lyra/ui/hooks/useIsDarkMode'
 import React from 'react'
 
-import { DISCORD_URL, DOCS_URL, GITHUB_URL, STATS_URL, V1_DAPP_URL } from '@/app/constants/links'
+import { DISCORD_URL, DOCS_URL, GITHUB_URL, STATS_URL } from '@/app/constants/links'
 import { LogEvent } from '@/app/constants/logEvents'
-import isMainnet from '@/app/utils/isMainnet'
 import logEvent from '@/app/utils/logEvent'
-import setIsMainnet from '@/app/utils/setIsMainnet'
 
 type Props = {
   onClose: () => void
@@ -15,7 +12,6 @@ type Props = {
 }
 
 const LayoutMoreDropdownListItems = ({ onClose, onClickPrivacy }: Props): JSX.Element => {
-  const [isDarkMode, setIsDarkMode] = useIsDarkMode()
   return (
     <>
       <DropdownButtonListItem
@@ -65,39 +61,6 @@ const LayoutMoreDropdownListItems = ({ onClose, onClickPrivacy }: Props): JSX.El
         }}
         label="Privacy"
         icon={IconType.FileText}
-      />
-      <DropdownButtonListItem
-        href={V1_DAPP_URL}
-        onClick={() => {
-          logEvent(LogEvent.NavV1Click)
-          onClose()
-        }}
-        target="_blank"
-        label="V1"
-        icon={IconType.ExternalLink}
-      />
-      <DropdownButtonListItem
-        label={isMainnet() ? 'Testnet' : 'Mainnet'}
-        onClick={() => {
-          const newIsMainnet = !isMainnet()
-          logEvent(LogEvent.NavNetworkToggle, {
-            isMainnet: newIsMainnet,
-          })
-          setIsMainnet(newIsMainnet)
-          onClose()
-        }}
-        icon={isMainnet() ? IconType.ToggleLeft : IconType.ToggleRight}
-      />
-      <DropdownButtonListItem
-        onClick={() => {
-          logEvent(LogEvent.NavLightModeToggle, {
-            type: !isDarkMode ? 'light' : 'dark',
-          })
-          setIsDarkMode(!isDarkMode)
-          onClose()
-        }}
-        label={isDarkMode ? 'Light Mode' : 'Dark Mode'}
-        icon={isDarkMode ? IconType.Sun : IconType.Moon}
       />
       {process.env.REACT_APP_RELEASE_TAG ? (
         <DropdownButtonListItem

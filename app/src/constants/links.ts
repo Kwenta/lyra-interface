@@ -2,10 +2,9 @@
 export const LYRA_SHARE_URL = 'https://share.lyra.finance'
 
 // External
-export const DISCORD_URL = 'https://discord.gg/Lyra'
-export const GITHUB_URL = 'https://github.com/lyra-finance'
+export const DISCORD_URL = 'https://discord.gg/kwentaio'
+export const GITHUB_URL = 'https://github.com/Kwenta/lyra-interface'
 export const OPTIMISM_FAUCET = 'https://optimismfaucet.xyz/'
-export const V1_DAPP_URL = 'https://v1-app.lyra.finance'
 export const BINANCE_URL = 'https://binance.com'
 export const CRYPTO_URL = 'https://crypto.com'
 export const KUCOIN_URL = 'https://kucoin.com'

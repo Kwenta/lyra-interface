@@ -54,7 +54,7 @@ export default function LayoutDesktopNav(): JSX.Element {
               <Image src={getAssetSrc('/images/logo.svg')} height={20} />
             </BaseLink>
           </Flex>
-          <Flex flexGrow={1} alignItems={'center'} justifyContent={'flex-start'}>
+          <Flex flexGrow={1} alignItems={'center'} justifyContent={'center'}>
             {TABS.map(tab => (
               <Link
                 key={tab.path}

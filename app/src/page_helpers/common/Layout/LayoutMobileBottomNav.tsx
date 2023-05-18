@@ -95,7 +95,7 @@ export default function LayoutMobileBottomNav(): JSX.Element {
           <DropdownButtonListItem
               href={KWENTA_MARKETS_URL}
               label="Futures"
-              rightContent={<Image src={getAssetSrc('/images/link-light.svg')} height={20} ml={2} />}
+              rightIcon={<Image src={getAssetSrc('/images/link-light.svg')} height={20} ml={2} />}
             />
         </List>
       </Modal>

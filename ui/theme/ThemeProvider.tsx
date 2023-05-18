@@ -12,7 +12,7 @@ type Props = {
   isLightMode?: boolean
 }
 
-export default function ThemeProvider({ children, isDarkMode = false, isLightMode = false }: Props) {
+export default function ThemeProvider({ children, isDarkMode = true, isLightMode = false }: Props) {
   const theme = isDarkMode ? darkTheme : isLightMode ? lightTheme : getThemePreset(true)
 
   useEffect(() => {

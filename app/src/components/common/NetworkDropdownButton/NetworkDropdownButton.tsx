@@ -1,7 +1,6 @@
 import DropdownButton from '@lyra/ui/components/Button/DropdownButton'
 import DropdownButtonListItem from '@lyra/ui/components/Button/DropdownButtonListItem'
 import Image from '@lyra/ui/components/Image'
-import useIsDarkMode from '@lyra/ui/hooks/useIsDarkMode'
 import useIsMobile from '@lyra/ui/hooks/useIsMobile'
 import { MarginProps } from '@lyra/ui/types'
 import { Network } from '@lyrafinance/lyra-js'
@@ -23,8 +22,6 @@ export default function NetworkDropdownButton({ selectedNetwork, onSelectNetwork
     setIsOpen(false)
   }, [])
 
-  const [isDarkMode] = useIsDarkMode()
-
   return (
     <DropdownButton
       mobileTitle="Select Network"
@@ -39,7 +36,7 @@ export default function NetworkDropdownButton({ selectedNetwork, onSelectNetwork
         )
       }
       leftIcon={!isMobile ? <Image size={18} src={getNetworkLogoURI(selectedNetwork)} /> : null}
-      variant={isDarkMode ? 'static' : 'white'}
+      variant={'static'}
       {...styleProps}
     >
       {Object.values(Network).map(networkOption => (

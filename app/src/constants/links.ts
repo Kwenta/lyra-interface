@@ -2,10 +2,9 @@
 export const LYRA_SHARE_URL = 'https://share.lyra.finance'
 
 // External
-export const DISCORD_URL = 'https://discord.gg/Lyra'
-export const GITHUB_URL = 'https://github.com/lyra-finance'
+export const DISCORD_URL = 'https://discord.gg/kwentaio'
+export const GITHUB_URL = 'https://github.com/Kwenta/lyra-interface'
 export const OPTIMISM_FAUCET = 'https://optimismfaucet.xyz/'
-export const V1_DAPP_URL = 'https://v1-app.lyra.finance'
 export const BINANCE_URL = 'https://binance.com'
 export const CRYPTO_URL = 'https://crypto.com'
 export const KUCOIN_URL = 'https://kucoin.com'
@@ -21,6 +20,7 @@ export const UNISWAP_URL = 'https://app.uniswap.org'
 export const ONE_INCH_URL = 'https://app.1inch.io'
 export const SOCKET_URL = 'https://www.bungee.exchange/'
 export const TWITTER_URL = 'https://twitter.com'
+export const KWENTA_MARKETS_URL = 'https://kwenta.eth.limo/market/?accountType=cross_margin&asset=sETH'
 
 export const TERMS_OF_USE_URL = 'https://www.lyra.finance/terms-of-use'
 export const REFERRALS_TERMS_OF_USE_URL = 'https://www.lyra.finance/referral-terms'

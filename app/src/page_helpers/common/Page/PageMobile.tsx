@@ -29,9 +29,8 @@ export default function PageMobile({
       <Image
         mb={!(title || headerCard) && !showBackButton ? 0 : !(title || headerCard) && showBackButton ? 8 : 12}
         href={getPagePath({ page: PageId.TradeIndex })}
-        src={getAssetSrc('/images/logo.png')}
+        src={getAssetSrc('/images/logo.svg')}
         height={36}
-        width={36}
       />
       {title || headerCard ? (
         <>

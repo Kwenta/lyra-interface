@@ -1,14 +1,17 @@
 import DropdownButtonListItem from '@lyra/ui/components/Button/DropdownButtonListItem'
 import Flex from '@lyra/ui/components/Flex'
 import Icon, { IconType } from '@lyra/ui/components/Icon'
+import Image from '@lyra/ui/components/Image'
 import List from '@lyra/ui/components/List'
 import Modal from '@lyra/ui/components/Modal'
 import React, { useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { MOBILE_FOOTER_HEIGHT } from '@/app/constants/layout'
+import { KWENTA_MARKETS_URL } from '@/app/constants/links'
 import TABS from '@/app/constants/tabs'
 import AccountButton from '@/app/containers/common/AccountButton'
+import getAssetSrc from '@/app/utils/getAssetSrc'
 import { getNavPageFromPath } from '@/app/utils/getNavPageFromPath'
 import logEvent from '@/app/utils/logEvent'
 
@@ -89,6 +92,11 @@ export default function LayoutMobileBottomNav(): JSX.Element {
             label="More"
             rightContent={<Icon icon={IconType.ChevronRight}></Icon>}
           />
+          <DropdownButtonListItem
+              href={KWENTA_MARKETS_URL}
+              label="Futures"
+              rightIcon={<Image src={getAssetSrc('/images/link-light.svg')} height={20} ml={2} />}
+            />
         </List>
       </Modal>
       <Modal

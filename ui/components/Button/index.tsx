@@ -286,7 +286,7 @@ const Button = React.forwardRef(
           />
         ) : null}
         <Flex py={py} justifyContent={'flex-end'} alignItems="center">
-          {typeof rightIcon === 'string' ? <IconOrImage src={rightIcon} size={iconSize} /> : rightIcon}
+          {typeof rightIcon === 'string' ? <IconOrImage src={rightIcon} size={iconSize} color="primaryText" /> : rightIcon}
         </Flex>
       </Flex>
     ) : null

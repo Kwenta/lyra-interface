@@ -80,7 +80,7 @@ const AccountButton = withSuspense(
         {account ? (
           <ConnectButton.Custom>
             {({ openAccountModal }) => {
-              const variant = isOverride ? 'warning' : isDarkMode ? 'static' : 'white'
+              const variant = isOverride ? 'warning' : 'white'
               const onClick = async () => {
                 if (isOverride) {
                   // Unset override

@@ -5,8 +5,8 @@ import emptyFunction from '../utils/emptyFunction'
 
 export default function useIsDarkMode(isDefaultDarkMode?: boolean): [boolean, Dispatch<boolean>] {
   try {
-    const [colorMode, setColorMode] = useColorMode<'dark' | 'light'>('dark')
-    const isDarkMode = colorMode === 'dark'
+    const [, setColorMode] = useColorMode<'dark' | 'light'>('dark')
+    const isDarkMode = true
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const setIsDarkMode = useCallback(
       (isDarkMode: boolean) => {

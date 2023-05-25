@@ -32,21 +32,31 @@ const VaultsMarketDropdown = ({ vaults, selectedVault, ...styleProps }: Props): 
       leftIcon={<MarketImage market={selectedMarket} />}
       mobileTitle="Select Vault"
     >
-      {vaults.map(({ market }) => (
-        <DropdownButtonListItem
-          key={market.address}
-          isSelected={market.address === selectedMarket.address}
-          label={`${formatTokenName(market.baseToken)} Vault`}
-          sublabel={
-            <Text variant="small" as="span" color="secondaryText">
-              {getNetworkDisplayName(market.lyra.network)}
-            </Text>
-          }
-          href={getPagePath({ page: PageId.Vaults, network: market.lyra.network, marketAddressOrName: market.name })}
-          onClick={onClose}
-          icon={<MarketImage market={market} />}
-        />
-      ))}
+      {vaults
+        .filter(vault => !vault.isDeprecated || vault.liquidityToken.balance.gt(0))
+        .map(({ market, isDeprecated }) => (
+          <DropdownButtonListItem
+            key={market.address}
+            isSelected={market.address === selectedMarket.address}
+            label={
+              <Text color="text">
+                {formatTokenName(market.baseToken)} Vault{isDeprecated ? ' · Deprecated' : ''}
+              </Text>
+            }
+            sublabel={
+              <Text variant="small" as="span" color="secondaryText">
+                {getNetworkDisplayName(market.lyra.network)}
+              </Text>
+            }
+            href={getPagePath({
+              page: PageId.EarnVaults,
+              network: market.lyra.network,
+              marketAddressOrName: market.name,
+            })}
+            onClick={onClose}
+            icon={<MarketImage market={market} />}
+          />
+        ))}
     </DropdownButton>
   )
 }

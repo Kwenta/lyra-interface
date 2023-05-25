@@ -10,14 +10,12 @@ export const getNavPageFromPath = (path: string): PageId | null => {
   const rootPath = parts[0]
 
   // TODO: Replace logic with TabId
-  if (rootPath === 'trade') {
+  if (rootPath === 'trade' || rootPath === 'position') {
     return PageId.Trade
   } else if (rootPath === 'airdrop') {
     return PageId.Leaderboard
-  } else if (rootPath === 'vaults') {
-    return PageId.VaultsIndex
-  } else if (rootPath === 'rewards') {
-    return PageId.RewardsIndex
+  } else if (rootPath === 'earn' || rootPath === 'rewards' || rootPath === 'vaults') {
+    return PageId.EarnIndex
   } else if (rootPath === 'faucet') {
     return PageId.Faucet
   } else if (rootPath === 'vote') {

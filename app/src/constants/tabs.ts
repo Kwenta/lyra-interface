@@ -17,18 +17,12 @@ const TABS: Tab[] = [
     name: 'Trade',
     logEvent: LogEvent.NavTradeTabClick,
   },
-  {
-    path: getPagePath({ page: PageId.VaultsIndex }),
-    rootPageId: PageId.VaultsIndex,
-    name: 'Vaults',
-    logEvent: LogEvent.NavVaultsTabClick,
-  },
   isMainnet()
     ? {
-        path: getPagePath({ page: PageId.RewardsIndex }),
-        rootPageId: PageId.RewardsIndex,
-        name: 'Rewards',
-        logEvent: LogEvent.NavRewardsTabClick,
+        path: getPagePath({ page: PageId.EarnIndex }),
+        rootPageId: PageId.EarnIndex,
+        name: 'Earn',
+        logEvent: LogEvent.NavEarnTabClick,
       }
     : {
         path: getPagePath({ page: PageId.Faucet }),
@@ -42,12 +36,12 @@ const TABS: Tab[] = [
     name: 'Airdrop',
     logEvent: LogEvent.NavLeaderboardTabClick,
   },
-  // {
-  //   path: getPagePath({ page: PageId.VoteIndex }),
-  //   rootPageId: PageId.VoteIndex,
-  //   name: 'Vote',
-  //   logEvent: LogEvent.NavVoteTabClick,
-  // },
+  {
+    path: getPagePath({ page: PageId.VoteIndex }),
+    rootPageId: PageId.VoteIndex,
+    name: 'Vote',
+    logEvent: LogEvent.NavVoteTabClick,
+  },
 ]
 
 export default TABS

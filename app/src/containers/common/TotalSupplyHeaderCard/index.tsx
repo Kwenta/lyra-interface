@@ -19,11 +19,9 @@ const TotalSupplyHeaderCard = withSuspense(() => {
   const circulatingSupplyPct = supply ? supply.totalCirculatingSupply / supply.totalSupply : 0
   return supply ? (
     <Card variant="outline" width="100%" height="100%">
-      <CardBody>
-        <Text variant="cardHeading" mb={10}>
-          Circulating Supply
-        </Text>
-        <Flex>
+      <CardBody height="100%">
+        <Text variant="cardHeading">Circulating Supply</Text>
+        <Flex mt="auto">
           <Tooltip
             showInfoIcon
             tooltip={

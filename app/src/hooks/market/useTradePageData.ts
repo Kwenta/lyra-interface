@@ -1,4 +1,4 @@
-import { Market, Network, Position } from '@lyrafinance/lyra-js'
+import { Market, Network, Position, Version } from '@lyrafinance/lyra-js'
 import { useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -20,7 +20,7 @@ const fetchTradePageData = async (network: Network, owner: string | null): Promi
   const maybeFetchPositions = async (): Promise<Position[]> => (owner ? getLyraSDK(network).openPositions(owner) : [])
   const [markets, openPositions] = await Promise.all([fetchMarkets([network]), maybeFetchPositions()])
   return {
-    markets: markets,
+    markets: markets.filter(m => m.lyra.version !== Version.Avalon),
     openPositions: openPositions.sort((a, b) => a.expiryTimestamp - b.expiryTimestamp),
   }
 }

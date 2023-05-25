@@ -8,14 +8,8 @@ import fetchGlobalRewardEpochData, { GlobalRewardEpochData } from '../utils/fetc
 import findMarketX from '../utils/findMarketX'
 import fromBigNumber from '../utils/fromBigNumber'
 import getEffectiveLiquidityTokens, { getMinimumStakedLyra } from '../utils/getEffectiveLiquidityTokens'
-import getEffectiveTradingFeeRebate from '../utils/getEffectiveTradingFeeRebate'
 import getUniqueBy from '../utils/getUniqueBy'
 import isMarketEqual from '../utils/isMarketEqual'
-
-export type GlobalRewardEpochTradingFeeRebateTier = {
-  stakedLyraCutoff: number
-  feeRebate: number
-}
 
 export type GlobalRewardEpochTradingBoostTier = {
   stakingCutoff: number
@@ -62,7 +56,6 @@ export class GlobalRewardEpoch {
   isComplete: boolean
   totalAverageStakedLyra: number
   tradingRewardsCap: RewardEpochTokenAmount[]
-  tradingFeeRebateTiers: GlobalRewardEpochTradingFeeRebateTier[]
   tradingBoostTiers: GlobalRewardEpochTradingBoostTier[]
   vaultRewardTokens: RewardEpochToken[]
   tradingRewardTokens: RewardEpochToken[]
@@ -83,10 +76,6 @@ export class GlobalRewardEpoch {
     this.epoch = epoch
     this.markets = markets
     this.marketsLiquidity = marketsLiquidity
-    this.tradingFeeRebateTiers = epoch.tradingRewardConfig?.rebateRateTable?.map(tier => ({
-      stakedLyraCutoff: tier.cutoff,
-      feeRebate: tier.returnRate,
-    }))
     this.tradingBoostTiers = epoch.tradingRewardConfig?.boostRateTable?.map(tier => ({
       stakingCutoff: tier.stakingCutoff,
       tradingCutoff: tier.tradingCutoff,
@@ -204,15 +193,11 @@ export class GlobalRewardEpoch {
       totalAvgScaledStkLyra,
       mmvConfig.x
     )
-    const totalAvgBoostedVaultTokens = this.totalAverageBoostedVaultTokens(marketAddressOrName)
-    const boostedPortionOfLiquidity =
-      totalAvgBoostedVaultTokens > 0 ? effectiveLpTokensPerLpToken / totalAvgBoostedVaultTokens : 0
-    const basePortionOfLiquidity = totalAvgVaultTokens > 0 ? vaultTokenBalance / totalAvgVaultTokens : 0
 
     // This ratio is for no staking -> staking w/ stkLyraBalance (noStakingMultiplier)
     // Vs UI apy multiplier is from zero staking -> staking w/ stkLyraBalance (vaultApyMultiplier)
-    const apyMultiplier = basePortionOfLiquidity > 0 ? boostedPortionOfLiquidity / basePortionOfLiquidity : 0
-
+    const apyMultiplier = (effectiveLpTokensPerLpToken / vaultTokenBalance) * 2
+    // const apyMultiplier = basePortionOfLiquidity > 0 ? boostedPortionOfLiquidity / basePortionOfLiquidity : 0
     // Calculate total vault token balance, including pending deposits
     const tokenPrice = fromBigNumber(this.marketsLiquidity[marketIdx].tokenPrice)
     const totalQueuedVaultTokens =
@@ -281,51 +266,16 @@ export class GlobalRewardEpoch {
   totalAverageVaultTokens(marketAddressOrName: string): number {
     const market = findMarketX(this.markets, marketAddressOrName)
     const marketKey = market.baseToken.symbol
-    return this.progressDays ? (this.epoch.totalLpTokenDays[marketKey] ?? 0) / this.progressDays : 0
+    return fromBigNumber(market.params.NAV)
+    // const test = await market.liquidity()
+    // test.
+    // return this.progressDays ? (this.epoch.totalLpTokenDays[marketKey] ?? 0) / this.progressDays : 0
   }
 
   totalAverageBoostedVaultTokens(marketAddressOrName: string): number {
     const market = findMarketX(this.markets, marketAddressOrName)
     const marketKey = market.baseToken.symbol
     return this.progressDays ? (this.epoch.totalBoostedLpTokenDays[marketKey] ?? 0) / this.progressDays : 0
-  }
-
-  tradingFeeRebate(stakedLyraBalance: number): number {
-    const {
-      useRebateTable,
-      rebateRateTable,
-      maxRebatePercentage,
-      netVerticalStretch,
-      verticalShift,
-      vertIntercept,
-      stretchiness,
-    } = this.epoch.tradingRewardConfig
-    return getEffectiveTradingFeeRebate(
-      stakedLyraBalance,
-      useRebateTable,
-      rebateRateTable,
-      maxRebatePercentage,
-      netVerticalStretch,
-      verticalShift,
-      vertIntercept,
-      stretchiness
-    )
-  }
-
-  tradingRewards(tradingFees: number, stakedLyraBalance: number): RewardEpochTokenAmount[] {
-    return this.epoch.tradingRewardConfig.tokens.map(token => {
-      const currentPrice = this.tokenPriceMap[token.address]?.price ?? 0
-      const price = this.isComplete ? token.fixedPrice : Math.max(currentPrice, token.floorTokenPrice)
-      const feeRebate = this.tradingFeeRebate(stakedLyraBalance)
-      const feesRebated = feeRebate * tradingFees
-      const rewardAmount = (feesRebated * token.portion) / price
-      return {
-        amount: isNaN(rewardAmount) ? 0 : rewardAmount,
-        address: token.address,
-        decimals: token.decimals,
-        symbol: token.symbol,
-      }
-    })
   }
 
   // Edge
